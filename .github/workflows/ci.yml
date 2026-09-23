@@ -1,0 +1,46 @@
+name: Checks
+
+# Independent of where the site is hosted. Runs the leak check and decrypts the
+# built bundles as a recipient, so the guarantees hold on every push whether or
+# not a deploy target is configured yet.
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Restore keys
+        env:
+          CV_KEYS: ${{ secrets.CV_KEYS }}
+        run: |
+          if [ -z "$CV_KEYS" ]; then
+            echo "::error::CV_KEYS secret is not set. See README, 'Deploying'."
+            exit 1
+          fi
+          mkdir -p .keys
+          printf '%s' "$CV_KEYS" > .keys/keys.json
+          chmod 600 .keys/keys.json
+
+      - run: npm ci
+
+      # Ends in the leak check: fails if any private string is readable in
+      # dist/, or if a public page carries a marker or a reference to the
+      # bundles.
+      - run: npm run build
+
+      # Decrypts both pages as a recipient and confirms the public pages contain
+      # none of it.
+      - run: npm run verify-unlock
