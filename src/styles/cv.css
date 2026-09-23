@@ -47,6 +47,14 @@
   --only-dark: none;
 
   /*
+    Skill chips are coloured by group, and each group only carries a hue. These
+    are the lightness and chroma every hue is drawn at, so all groups sit at
+    the same weight and the scheme still flips them in one place.
+  */
+  --chip-line: 0.68 0.11;
+  --chip-icon: 0.52 0.13;
+
+  /*
     Where the rail column ends, measured from the left edge of the page. `.wrap`
     is centred and content-box, so its left margin is whatever is left over once
     the page has hit its max width, halved; the rail starts one gutter inside
@@ -89,6 +97,9 @@
 
     --only-light: none;
     --only-dark: block;
+
+    --chip-line: 0.6 0.1;
+    --chip-icon: 0.74 0.12;
   }
 }
 
@@ -109,6 +120,9 @@
 
     --only-light: none;
     --only-dark: block;
+
+    --chip-line: 0.6 0.1;
+    --chip-icon: 0.74 0.12;
   }
 }
 
@@ -439,11 +453,54 @@ a:hover {
   margin: 0;
   padding: 0;
   display: grid;
-  gap: 2.5rem;
+  --list-gap: 2.5rem;
+  gap: var(--list-gap);
 }
 
 .list-after {
   margin-top: 1.75rem;
+}
+
+/*
+  The work history reads as a timeline: a thin spine down the left, with a
+  marigold dot level with each entry's start year. The spine is drawn per
+  entry, from its own dot down across the gap to the next one, so it starts at
+  the first dot and stops at the last without knowing how tall anything is. It
+  runs vertically in the rule colour — the only horizontal rule on the page is
+  still the marigold one under a heading.
+*/
+.timeline {
+  --dot: 0.625rem;
+  /* Half the height of the `.when` line, so the dot sits on its centre. */
+  --dot-y: 0.7rem;
+  padding-left: 1.75rem;
+}
+
+.timeline .item {
+  position: relative;
+}
+
+.timeline .item::before,
+.timeline .item::after {
+  content: '';
+  position: absolute;
+  left: -1.75rem;
+}
+
+.timeline .item::after {
+  top: calc(var(--dot-y) - var(--dot) / 2);
+  width: var(--dot);
+  height: var(--dot);
+  border-radius: 50%;
+  background: var(--marigold);
+}
+
+.timeline .item:not(:last-child)::before {
+  top: var(--dot-y);
+  bottom: calc(-1 * var(--list-gap) - var(--dot-y));
+  translate: calc(var(--dot) / 2 - 1px);
+  width: 2px;
+  background: var(--rule);
 }
 
 .item {
@@ -503,6 +560,69 @@ a:hover {
 .refs h3 {
   font-size: 1.0625rem;
   margin-bottom: 0.2rem;
+}
+
+/* ---------- skills ---------- */
+
+/*
+  One flowing wrap of groups. A group is the unit that wraps: its icon and its
+  chips stay together on one line, and the next group moves down whole rather
+  than splitting. Only a group wider than the entire column — on a phone —
+  breaks across lines, because the alternative is running off the page.
+
+  Each group carries only a hue (`--h`, set inline); its icon and chip edges
+  are that hue at the lightness and chroma the palette gives for the scheme in
+  force. The chips themselves stay paper and ink, so a section of them reads
+  as texture rather than as a paint chart — and marigold is never a chip
+  colour, so the heading rules stay the one bright device on the page.
+*/
+.skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.9rem 2rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.skill-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  max-width: 100%;
+}
+
+.skill-group > .icon {
+  width: 1rem;
+  height: 1rem;
+  color: oklch(var(--chip-icon) var(--h));
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.chip {
+  font-size: 0.85rem;
+  line-height: 1.25;
+  white-space: nowrap;
+  padding: 0.18em 0.65em;
+  border-radius: 999px;
+  border: 1px solid oklch(var(--chip-line) var(--h));
+  background: var(--paper);
+  color: var(--ink);
+}
+
+/* Used before: out of the group's colour and into the page's quiet one. */
+.chip.past {
+  color: var(--muted);
+  border-color: var(--rule);
+  border-style: dashed;
 }
 
 /* ---------- print ---------- */
@@ -635,7 +755,19 @@ a:hover {
   }
 
   .list {
-    gap: 5.5mm;
+    --list-gap: 5.5mm;
+  }
+
+  /* The `.when` line at 9pt on 1.45 leading. */
+  .timeline {
+    --dot: 2.2mm;
+    --dot-y: 2.3mm;
+    padding-left: 6mm;
+  }
+
+  .timeline .item::before,
+  .timeline .item::after {
+    left: -6mm;
   }
 
   .list-after {

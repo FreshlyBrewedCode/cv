@@ -1,6 +1,6 @@
 import { locales, type Lang } from '../i18n';
 import type { Content } from '../i18n/types';
-import { handle, repos, roles, writing, workingSince } from '../data/shared';
+import { handle, repos, roles, skillGroups, writing, workingSince } from '../data/shared';
 import { priv } from '../data/private';
 
 export type Mode = 'public' | 'private';
@@ -28,8 +28,9 @@ export interface View {
   /** Real name once unlocked, a description of the company before that. */
   employer: string;
   workLede: string;
-  roles: { title: string; body: string; from: string; to: string }[];
+  roles: { title: string; body: string; from: string; to: string; when: string }[];
   repos: { id: string; lang: string; stars: number; tech: string[]; blurb: string; detail: string; url: string }[];
+  skills: { id: string; label: string; hue: number; items: { name: string; past: boolean }[] }[];
   writing: { title: string; where: string; note: string; year: string }[];
   references: Reference[];
 }
@@ -78,7 +79,12 @@ export function buildView(lang: Lang, mode: Mode): View {
     facts,
     employer,
     workLede: c.workLede.replace('{employer}', employer),
-    roles: roles.map((r) => ({ ...c.roles[r.id], from: r.from, to: r.to ?? c.present })),
+    roles: roles.map((r) => ({
+      ...c.roles[r.id],
+      from: r.from,
+      to: r.to ?? c.present,
+      when: r.to === null ? c.since.replace('{year}', r.from) : r.from,
+    })),
     repos: repos.map((r) => ({
       id: r.id,
       lang: r.lang,
@@ -86,6 +92,12 @@ export function buildView(lang: Lang, mode: Mode): View {
       tech: r.tech,
       url: `https://github.com/${handle}/${r.id}`,
       ...c.repos[r.id],
+    })),
+    skills: skillGroups.map((g) => ({
+      id: g.id,
+      label: c.skills.groups[g.id],
+      hue: g.hue,
+      items: g.items.map((i) => ({ name: c.skills.terms[i.name] ?? i.name, past: 'past' in i && i.past })),
     })),
     writing: writing.map((w) => ({ ...c.writing[w.id], year: w.year })),
     references: unlocked

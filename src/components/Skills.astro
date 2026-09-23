@@ -1,0 +1,46 @@
+---
+/**
+ * The skills section: every group in one flowing wrap, each group led by its
+ * icon and kept together on a line, its chips edged in the group's colour.
+ * Things used before but not any more are outlined in the rule colour instead,
+ * and say so to screen readers.
+ */
+import Icon from './Icon.astro';
+import type { View } from '../lib/view';
+
+interface Props {
+  groups: View['skills'];
+  past: string;
+}
+
+const { groups, past } = Astro.props;
+
+/** One icon per group, named for what the group actually holds. */
+const icons: Record<string, string> = {
+  languages: 'code-xml',
+  frameworks: 'package',
+  services: 'server',
+  tools: 'hammer',
+  ai: 'sparkles',
+  practice: 'users',
+};
+---
+
+<ul class="skills">
+  {
+    groups.map((g) => (
+      <li class="skill-group" style={`--h: ${g.hue}`} title={g.label}>
+        <Icon name={icons[g.id]} />
+        <span class="visually-hidden">{g.label}:</span>
+        <ul class="chips">
+          {g.items.map((i) => (
+            <li class:list={['chip', { past: i.past }]}>
+              {i.name}
+              {i.past && <span class="visually-hidden"> ({past})</span>}
+            </li>
+          ))}
+        </ul>
+      </li>
+    ))
+  }
+</ul>

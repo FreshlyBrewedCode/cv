@@ -24,6 +24,7 @@ export interface Content {
     about: string;
     projects: string;
     work: string;
+    skills: string;
     writing: string;
     references: string;
     terms: string;
@@ -38,6 +39,15 @@ export interface Content {
     rate: string;
     github: string;
     since: string;
+  };
+
+  skills: {
+    groups: Record<string, string>;
+    /** Shown beside things worked with before but not any more. */
+    past: string;
+    /** Translations for skill names that are ordinary words, keyed by the
+        English name in src/data/shared.ts. */
+    terms: Record<string, string>;
   };
 
   /** Unit label after a repository's star count. */
@@ -57,4 +67,7 @@ export interface Content {
   };
 
   present: string;
+  /** The timeline label for the role that has not ended; `{year}` is when it
+      started. Earlier roles are labelled with their start year alone. */
+  since: string;
 }

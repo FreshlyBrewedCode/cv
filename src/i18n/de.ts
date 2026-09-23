@@ -20,6 +20,7 @@ export const de: Content = {
   },
 
   sections: {
+    skills: 'Womit ich baue',
     about: 'Wo ich im Stack arbeite',
     projects: 'Was ich öffentlich pflege',
     work: 'Der Job, der das alles bezahlt',
@@ -37,6 +38,24 @@ export const de: Content = {
     rate: 'Gehaltsvorstellung',
     github: 'GitHub',
     since: 'Berufstätig seit',
+  },
+
+  skills: {
+    groups: {
+      languages: 'Sprachen',
+      frameworks: 'Bibliotheken & Frameworks',
+      services: 'Cloud & Dienste',
+      tools: 'Werkzeuge',
+      ai: 'KI',
+      practice: 'Arbeitsweise',
+    },
+    past: 'früher genutzt',
+    terms: {
+      mentoring: 'Mentoring',
+      'design reviews': 'Design-Reviews',
+      'incident response': 'Incident Response',
+      'technical writing': 'Technisches Schreiben',
+    },
   },
 
   starsLabel: 'Sterne',
@@ -58,6 +77,14 @@ export const de: Content = {
     backend: {
       title: 'Backend-Entwickler',
       body: 'Als fünfter Entwickler eingestiegen. Den Zolldienst geschrieben, der bis heute jede grenzüberschreitende Sendung abwickelt, dazu die Wiederholungslogik um eine Spediteurs-API, die ungefähr wöchentlich ausfiel.',
+    },
+    bachelor: {
+      title: 'B.Sc. Informatik, Chalmers University of Technology',
+      body: 'Abschlussarbeit über Konsistenz-Kompromisse in offlinefähigen Mobil-Apps, betreut von der Arbeitsgruppe für verteilte Systeme. Zwei Semester Tutor im Datenbankkurs des zweiten Studienjahres.',
+    },
+    school: {
+      title: 'Naturwissenschaftliches Profil, Hvitfeldtska gymnasiet',
+      body: 'Gymnasium in Göteborg mit Mathematik und Physik als Schwerpunkt. Hier die erste Web-App geschrieben: einen Stundenplan für die Robotik-AG der Schule.',
     },
   },
 
@@ -108,4 +135,5 @@ export const de: Content = {
   },
 
   present: 'heute',
+  since: 'seit {year}',
 };

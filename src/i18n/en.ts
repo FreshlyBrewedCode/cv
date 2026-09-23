@@ -23,6 +23,7 @@ export const en: Content = {
     about: 'Where I work in the stack',
     projects: 'Things I maintain in public',
     work: 'The day job, which pays for all of it',
+    skills: 'What I build with',
     writing: 'Written down somewhere',
     references: 'People who will vouch for it',
     terms: 'Terms',
@@ -37,6 +38,24 @@ export const en: Content = {
     rate: 'Rate',
     github: 'GitHub',
     since: 'Working since',
+  },
+
+  skills: {
+    groups: {
+      languages: 'Languages',
+      frameworks: 'Libraries & frameworks',
+      services: 'Cloud & services',
+      tools: 'Tools',
+      ai: 'AI',
+      practice: 'Practice',
+    },
+    past: 'used before',
+    terms: {
+      mentoring: 'Mentoring',
+      'design reviews': 'Design reviews',
+      'incident response': 'Incident response',
+      'technical writing': 'Technical writing',
+    },
   },
 
   starsLabel: 'stars',
@@ -58,6 +77,14 @@ export const en: Content = {
     backend: {
       title: 'Backend engineer',
       body: 'Joined as the fifth engineer. Wrote the customs-declaration service that still handles every cross-border shipment, and the retry machinery around a carrier API that went down roughly weekly.',
+    },
+    bachelor: {
+      title: 'BSc Computer Science, Chalmers University of Technology',
+      body: 'Thesis on consistency trade-offs in offline-capable mobile apps, supervised in the distributed systems group. Teaching assistant for the second-year databases course for two terms.',
+    },
+    school: {
+      title: 'Natural Sciences programme, Hvitfeldtska gymnasiet',
+      body: 'Upper secondary school in Göteborg, with mathematics and physics as the main subjects. Wrote my first web app here: a timetable for the school’s robotics club.',
     },
   },
 
@@ -108,4 +135,5 @@ export const en: Content = {
   },
 
   present: 'present',
+  since: 'since {year}',
 };

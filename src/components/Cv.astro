@@ -6,10 +6,11 @@
  * the public output has no gaps and no markers.
  */
 import Icon from './Icon.astro';
+import Skills from './Skills.astro';
 import { buildView, type Mode, type FactKey } from '../lib/view';
 import { other, locales, localeHref } from '../i18n';
 import type { Lang } from '../i18n/types';
-import { handle, stars } from '../data/shared';
+import { handle } from '../data/shared';
 
 interface Props {
   lang: Lang;
@@ -26,6 +27,7 @@ const icons = {
   about: 'layers',
   projects: 'waypoints',
   work: 'briefcase',
+  skills: 'shapes',
   writing: 'pen-line',
   references: 'user-check',
 };
@@ -106,15 +108,33 @@ const factIcons: Record<FactKey, string> = {
       <p class="prose">{c.intro}</p>
     </section>
 
+    <section aria-labelledby="work">
+      <h2 class="h2" id="work"><Icon name={icons.work} />{c.sections.work}</h2>
+      <p class="prose">{v.workLede}</p>
+      <ul class="list list-after timeline">
+        {
+          v.roles.map((role) => (
+            <li class="item">
+              <p class="when">{role.when}</p>
+              <h3>{role.title}</h3>
+              <p>{role.body}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <section aria-labelledby="skills">
+      <h2 class="h2" id="skills"><Icon name={icons.skills} />{c.sections.skills}</h2>
+      <Skills groups={v.skills} past={c.skills.past} />
+    </section>
+
     <section aria-labelledby="projects">
       <h2 class="h2" id="projects"><Icon name={icons.projects} />{c.sections.projects}</h2>
       <ul class="list">
         {
           v.repos.map((r) => (
             <li class="item" id={`p-${r.id}`}>
-              <p class="when">
-                {r.lang}, {stars(r.stars)} {c.starsLabel}
-              </p>
               <h3>{r.id}</h3>
               <p>{r.blurb}</p>
               <p class="quiet">{r.detail}</p>
@@ -128,24 +148,6 @@ const factIcons: Record<FactKey, string> = {
                   github.com/{handle}/{r.id}
                 </a>
               </p>
-            </li>
-          ))
-        }
-      </ul>
-    </section>
-
-    <section aria-labelledby="work">
-      <h2 class="h2" id="work"><Icon name={icons.work} />{c.sections.work}</h2>
-      <p class="prose">{v.workLede}</p>
-      <ul class="list list-after">
-        {
-          v.roles.map((role) => (
-            <li class="item">
-              <p class="when">
-                {role.from}–{role.to}
-              </p>
-              <h3>{role.title}</h3>
-              <p>{role.body}</p>
             </li>
           ))
         }
