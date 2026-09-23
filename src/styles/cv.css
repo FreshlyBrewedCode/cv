@@ -455,13 +455,23 @@ a:hover {
     display: none;
   }
 
+  /*
+    The text still sits 12mm from the edge of the sheet — the page keeps 6mm of
+    that and `.wrap` holds the rest, so the tinted band can give its 6mm back
+    and bleed past the text without anything else moving. The first sheet gives
+    up most of its head margin for the same reason: the band starts the page.
+  */
   @page {
-    margin: 14mm 12mm;
+    margin: 14mm 6mm;
+  }
+
+  @page :first {
+    margin-top: 6mm;
   }
 
   .wrap {
     max-width: none;
-    padding-inline: 0;
+    padding-inline: 6mm;
   }
 
   /*
@@ -488,11 +498,24 @@ a:hover {
     margin-bottom: 3mm;
   }
 
-  /* The rail becomes a band of facts above the content: a 16rem sidebar wastes
-     a third of a portrait page, and the screen's sticky tint is meaningless on
-     paper. */
+  /*
+    The rail becomes a band of facts above the content: a 16rem sidebar wastes
+    a third of a portrait page. It keeps the tint it has on screen, painted on
+    the element itself rather than on the bleeding pseudo-element, because a
+    page margin is as far out as a background can go on paper.
+  */
   .rail::before {
     display: none;
+  }
+
+  .rail {
+    background: var(--tint);
+    /* Out to the paper's edge where the printer allows it, and clipped at the
+       page area where it doesn't — either way the text below stays aligned
+       with the sections underneath. */
+    margin-inline: -6mm;
+    padding: 6mm;
+    margin-bottom: 9mm;
   }
 
   .rail-sticky {
@@ -502,13 +525,12 @@ a:hover {
 
   .layout {
     display: block;
-    padding-block: 7mm 0;
+    padding-block: 0;
   }
 
   .facts {
     grid-template-columns: repeat(3, 1fr);
     gap: 3mm 8mm;
-    margin-bottom: 9mm;
   }
 
   .main {

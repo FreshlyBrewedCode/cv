@@ -53,7 +53,10 @@ print version, so what the browser previews is what you get. It drops the
 language switch, the print button itself and the session bar with its "show the
 public version" control — none of which mean anything on paper — then turns the
 sidebar into a three-column band of facts, because a 16rem rail wastes a third
-of a portrait page.
+of a portrait page. The band keeps the tint it has on screen. The 12mm the text
+sits from the edge of the sheet is split between `@page` and `.wrap` so that it
+can bleed past that text, since a page margin is as far out as a background can
+go on paper.
 
 Print spacing is set in millimetres, not rem. On paper `rem` still resolves
 against the 16px screen root, which is arbitrary once there is a physical page —
