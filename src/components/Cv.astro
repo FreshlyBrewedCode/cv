@@ -33,11 +33,11 @@ const icons = {
 /** One icon per rail fact, named for what the fact actually holds. */
 const factIcons: Record<FactKey, string> = {
   based: 'map-pin',
-  email: 'mail',
+  email: 'at-sign',
   phone: 'phone',
   address: 'home',
   github: 'git-branch',
-  since: 'calendar',
+  since: 'calendar-days',
   available: 'calendar-check',
   rate: 'wallet',
 };
@@ -59,33 +59,35 @@ const factIcons: Record<FactKey, string> = {
 
 <div class="wrap layout">
   <aside class="rail">
-    <h1 class="name">{c.name}</h1>
-    <p class="role">{c.headline}, {c.city}</p>
+    <div class="rail-sticky">
+      <h1 class="name">{c.name}</h1>
+      <p class="role">{c.headline}, {c.city}</p>
 
-    <dl class="facts">
+      <dl class="facts">
+        {
+          v.facts.map((f) => (
+            <div class="fact">
+              <dt>
+                <Icon name={factIcons[f.key]} />
+                {f.label}
+              </dt>
+              <dd>{f.href ? <a href={f.href}>{f.value}</a> : f.value}</dd>
+            </div>
+          ))
+        }
+      </dl>
+
       {
-        v.facts.map((f) => (
-          <div class="fact">
-            <dt>
-              <Icon name={factIcons[f.key]} />
-              {f.label}
-            </dt>
-            <dd>{f.href ? <a href={f.href}>{f.value}</a> : f.value}</dd>
-          </div>
-        ))
+        v.unlocked && (
+          <p class="session">
+            <span>{c.vault.unlocked}</span>
+            <button type="button" class="button" data-lock>
+              {c.vault.lock}
+            </button>
+          </p>
+        )
       }
-    </dl>
-
-    {
-      v.unlocked && (
-        <p class="session">
-          <span>{c.vault.unlocked}</span>
-          <button type="button" class="button" data-lock>
-            {c.vault.lock}
-          </button>
-        </p>
-      )
-    }
+    </div>
   </aside>
 
   <main class="main">

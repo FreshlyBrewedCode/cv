@@ -27,9 +27,9 @@
   --column: 74rem;
   --gutter: clamp(1.25rem, 5vw, 4rem);
 
-  /* Halfway between paper and rule: enough to read as a distinct panel behind
-     the rail, never enough to compete with the marigold rules for attention. */
-  --rail-bg: #e7e5de;
+  /* A light, even gray — just enough to separate the hero and rail from the
+     paper behind them, never enough to compete with the marigold rules. */
+  --tint: #efeeea;
 }
 
 body {
@@ -120,10 +120,15 @@ a:hover {
 
 /* ---------- hero ---------- */
 
-/* The name and role moved into the rail, so the hero is just the topline now —
-   its own bottom padding would double up with the layout's top padding. */
+/*
+  The name and role moved into the rail, so the hero is just the topline now.
+  It's a plain <header>, with no wrap padding of its own, so a background here
+  bleeds edge to edge for free — the same tint as the rail, forming one
+  continuous panel down the left side and across the top.
+*/
 .hero {
-  padding-block: clamp(1.5rem, 4vw, 2.5rem) 0;
+  background: var(--tint);
+  padding-block: clamp(1.5rem, 4vw, 2.5rem);
 }
 
 .topline {
@@ -170,21 +175,41 @@ a:hover {
 }
 
 /*
-  A quietly distinct panel — just enough tint to separate the overview from the
-  content column, never dark enough to compete with it. Sticky and tinted on
-  desktop only; on narrow screens and in print it flattens back into the page.
+  The tint fills the whole rail column, top to bottom — a full third of the
+  screen on desktop, not a card floating in it. Two layers do the work: `.rail`
+  is a plain grid item (stretched to the column's full height, same as `.main`,
+  by the grid's default align-items) that owns the background; `.rail-sticky`
+  is the shorter box inside it that actually scrolls with the page.
 */
 .rail {
-  /* Grid items stretch to the row's full height by default, which is as tall
-     as .main — leaving a sticky element with nowhere to actually stick.
-     align-self shrinks it back to its own content so it can. */
-  align-self: start;
+  position: relative;
+  isolation: isolate;
+}
+
+/*
+  The background lives on a pseudo-element rather than `.rail` itself so it can
+  bleed past the column's own box to the true edge of the viewport — `.rail`
+  sits inside `.wrap`'s padding like everything else, but the tint shouldn't.
+  The formula finds how far that padding-box edge is from the viewport: the
+  gutter, plus half of whatever space is left over once the page has hit its
+  max width.
+*/
+.rail::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: -1;
+  background: var(--tint);
+  left: calc(-1 * (var(--gutter) + max(0px, (100vw - var(--column)) / 2)));
+  width: calc(var(--gutter) + max(0px, (100vw - var(--column)) / 2) + 16rem);
+}
+
+.rail-sticky {
   position: sticky;
   top: 2rem;
   font-size: 0.9375rem;
-  background: var(--rail-bg);
-  border-radius: 0.75rem;
-  padding: 1.5rem 1.5rem 1.75rem;
+  padding-block: 0.5rem 2rem;
 }
 
 .facts {
@@ -236,11 +261,17 @@ a:hover {
     grid-template-columns: 1fr;
   }
 
-  .rail {
+  /* The rail is no longer a fixed-width column here, so the bleed is
+     symmetric: out to both true edges of the viewport, matching the hero
+     bar above it so the two tinted bands read as one continuous panel. */
+  .rail::before {
+    right: calc(-1 * var(--gutter));
+    width: auto;
+  }
+
+  .rail-sticky {
     position: static;
-    background: none;
-    border-radius: 0;
-    padding: 0;
+    padding-block: 1.5rem 2rem;
   }
 
   .name {
@@ -428,6 +459,7 @@ a:hover {
     scale.
   */
   .hero {
+    background: none;
     padding-block: 0;
   }
 
@@ -445,11 +477,13 @@ a:hover {
   /* The rail becomes a band of facts above the content: a 16rem sidebar wastes
      a third of a portrait page, and the screen's sticky tint is meaningless on
      paper. */
-  .rail {
+  .rail::before {
+    display: none;
+  }
+
+  .rail-sticky {
     position: static;
-    background: none;
-    border-radius: 0;
-    padding: 0;
+    padding-block: 0;
   }
 
   .layout {
