@@ -45,6 +45,20 @@ tailscale serve --bg --https=8443 http://127.0.0.1:4327
 tailscale serve --https=8443 off             # to undo
 ```
 
+### Dark mode
+
+Follows the system setting, with no toggle and no stored preference: the scheme
+is one `@media screen and (prefers-color-scheme: dark)` block at the top of
+`src/styles/cv.css` that restates the palette custom properties, and nothing
+below it knows which scheme it is in. Paper becomes a warm charcoal rather than
+black, and marigold stays as it is in daylight — it is a light colour in both
+schemes, so the ink drawn on it (`--marigold-ink`, the link and button hover
+state) is the one value that does not invert.
+
+The block is scoped to `screen` on purpose. Paper has no colour scheme, and the
+print styles assume a white page; without it, printing from a machine set to
+dark would put pale ink on that page.
+
 ### Printing
 
 The printer button in the header calls `window.print()`. There is no separate

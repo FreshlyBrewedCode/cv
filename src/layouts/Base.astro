@@ -27,6 +27,9 @@ const fonts =
     <title>{c.name} — {c.headline}</title>
     <meta name="description" content={c.meta.description} />
     <meta name="robots" content="noarchive, noimageindex, nosnippet" />
+    {/* Both paper colours from cv.css, so the browser's own chrome matches. */}
+    <meta name="theme-color" content="#f7f7f4" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#1b1a18" media="(prefers-color-scheme: dark)" />
     <link rel="icon" href="data:," />
     {
       langs.map((l) => (

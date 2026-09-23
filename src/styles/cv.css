@@ -13,16 +13,24 @@
            spacing scale is doing real work and has to stay generous.
 
   On marigold: at 2:1 against paper it can never carry text, so it only ever
-  appears as a rule or as a highlight behind ink, never as ink itself.
+  appears as a rule or as a highlight behind ink, never as ink itself. That is
+  true of the dark scheme too, which is why the ink it sits behind is the one
+  colour that does not invert.
 */
 
 :root {
+  color-scheme: light dark;
+
   --paper: #f7f7f4;
   --ink: #232022;
   --rule: #d6d2c8;
   --muted: #6e6a63;
   --oxblood: #8c2f27;
   --marigold: #e5a00d;
+
+  /* Text drawn on marigold, which is a light colour in both schemes: the one
+     ink that stays dark when everything else inverts. */
+  --marigold-ink: #232022;
 
   --column: 74rem;
   --gutter: clamp(1.25rem, 5vw, 4rem);
@@ -43,6 +51,29 @@
   --band: calc(
     max(0px, (100% - var(--column) - 2 * var(--gutter)) / 2) + var(--gutter) + var(--rail-width)
   );
+}
+
+/*
+  The dark scheme is nothing but the palette read the other way round: paper
+  goes to a warm charcoal rather than to black, the ink to a warm off-white, and
+  the tint stays the one step away from paper it is in daylight. Nothing below
+  this line knows which scheme it is in.
+
+  Screen only, deliberately. Paper has no colour scheme, and the print styles at
+  the end of the file assume a white page — without the `screen` here, printing
+  from a machine set to dark would put pale ink on it.
+*/
+@media screen and (prefers-color-scheme: dark) {
+  :root {
+    --paper: #1b1a18;
+    --ink: #ece8e1;
+    --rule: #3c3934;
+    --muted: #a09a90;
+    /* Oxblood is a stain soaked into paper; against charcoal that reads as a
+       smudge, so it lifts to the same red held up to the light. */
+    --oxblood: #cf6f5f;
+    --tint: #232120;
+  }
 }
 
 body {
@@ -92,7 +123,8 @@ a {
 
 a:hover {
   background: var(--marigold);
-  text-decoration-color: var(--ink);
+  color: var(--marigold-ink);
+  text-decoration-color: var(--marigold-ink);
 }
 
 :focus-visible {
@@ -263,6 +295,7 @@ a:hover {
 .button:hover {
   background: var(--marigold);
   border-color: var(--marigold);
+  color: var(--marigold-ink);
 }
 
 @media (max-width: 52rem) {
