@@ -130,7 +130,7 @@ export const en: Content = {
   },
 
   vault: {
-    unlocked: 'Full version, for this browser session.',
+    unlocked: 'Full version, for this link only.',
     lock: 'Show the public version',
   },
 

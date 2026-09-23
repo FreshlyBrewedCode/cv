@@ -27,7 +27,6 @@
 ---
 
 <script>
-  const STORE = 'a';
   const DIR = '_a';
   const enc = new TextEncoder();
 
@@ -64,29 +63,13 @@
     return p.endsWith('/') ? p : `${p}/`;
   }
 
-  function keep(value: string) {
-    try {
-      sessionStorage.setItem(STORE, value);
-    } catch {
-      /* storage can be unavailable; costs a re-visit of the link at worst */
-    }
-  }
-
-  function held() {
-    try {
-      return sessionStorage.getItem(STORE) ?? '';
-    } catch {
-      return '';
-    }
-  }
-
-  function drop() {
-    try {
-      sessionStorage.removeItem(STORE);
-    } catch {
-      /* ignore */
-    }
-  }
+  /*
+    Nothing is persisted: the key in the address bar is the only thing that
+    unlocks the page, so what you see is always what the URL you would share
+    shows. The one link that leaves the page, the language switch, carries the
+    key along instead.
+  */
+  let current = '';
 
   const note = (code: number) => console.warn('cv', code);
 
@@ -126,30 +109,34 @@
       );
 
       document.body.innerHTML = new TextDecoder().decode(plain);
-      keep(trimmed);
+      current = trimmed;
       dispatchEvent(new Event('render'));
     } catch {
       note(4);
     }
   }
 
+  const lock = () => location.replace(location.pathname + location.search);
+
   function wire() {
-    document.querySelector('[data-lock]')?.addEventListener('click', () => {
-      drop();
-      location.replace(location.pathname + location.search);
-    });
+    document.querySelector('[data-lock]')?.addEventListener('click', lock);
+    if (!current) return;
+    const carry = document.querySelector<HTMLAnchorElement>('a[data-carry]');
+    if (carry) carry.hash = new URLSearchParams({ k: current }).toString();
   }
 
   addEventListener('render', wire);
   wire();
 
-  const supplied = new URLSearchParams(location.hash.slice(1)).get('k');
-  const carried = supplied || held();
-  if (carried) apply(carried);
+  const supplied = () => new URLSearchParams(location.hash.slice(1)).get('k') ?? '';
 
+  if (supplied()) apply(supplied());
+
+  /* Editing the key out of the address bar puts the public page back. */
   addEventListener('hashchange', () => {
-    const next = new URLSearchParams(location.hash.slice(1)).get('k');
+    const next = supplied();
     if (next) apply(next);
+    else if (current) lock();
   });
 
   /*

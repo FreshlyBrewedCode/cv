@@ -130,7 +130,7 @@ export const de: Content = {
   },
 
   vault: {
-    unlocked: 'Vollständige Fassung, für diese Browser-Sitzung.',
+    unlocked: 'Vollständige Fassung, nur über diesen Link.',
     lock: 'Öffentliche Fassung anzeigen',
   },
 

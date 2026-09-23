@@ -19,8 +19,9 @@ npm run preview
 ```
 
 Open `http://localhost:4321/` with no fragment: an ordinary CV. Append the
-`#k=…` fragment the build printed and the page fills out. The session carries
-across the language switch.
+`#k=…` fragment the build printed and the page fills out. Nothing is stored:
+the key in the address bar is what unlocks the page, and the language switch
+carries it along. Drop the fragment and you are back on the public page.
 
 ```sh
 npm run keys                          # list recipients and their links
@@ -113,8 +114,7 @@ renders and no crawler reads. Open devtools and look for `cv <n>`:
 | `cv 4` | The bundle did not decrypt. Key and bundle are out of step.      |
 
 No `cv` line at all means the script never saw a key: check the fragment
-survived the copy, and remember an unlocked session persists in `sessionStorage`
-until you press "Show the public version".
+survived the copy.
 
 To reach the dev or preview server from another machine, pass `--host` and name
 the host you will use:
