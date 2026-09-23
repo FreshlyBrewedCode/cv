@@ -211,12 +211,61 @@ rather than turning the check off.
 
 ## Deploying
 
-Any static host.
+Live at **https://freshlybrewedcode.github.io/cv/**, built and deployed by
+`.github/workflows/deploy.yml` on every push to `main`.
 
-- `CV_SITE=https://cv.example.dev npm run build`, so the printed unlock links and
-  the `hreflang` tags point at the real domain.
-- Keep `.keys/` out of the repo and out of `dist/`. It is gitignored; if you build
-  in CI, hold it in a secret and write it at build time. Losing it invalidates
-  every link you have sent.
-- Serve `dist/_a/` as ordinary static files and make sure directory listing is
-  off, or the unguessable filenames stop being unguessable.
+Two workflows, deliberately separate:
+
+- **Checks** (`ci.yml`) — leak check plus a full decrypt of the built bundles as
+  a recipient. No dependency on a deploy target, so it keeps working if hosting
+  ever moves.
+- **Build and deploy** (`deploy.yml`) — the same gates, then GitHub Pages.
+
+### Secrets
+
+| Secret       | Required | What it is |
+| ------------ | -------- | ---------- |
+| `CV_KEYS`    | yes      | The contents of `.keys/keys.json` |
+| `CV_PRIVATE` | no       | The contents of `private/private.json` |
+
+```sh
+gh secret set CV_KEYS    < .keys/keys.json
+gh secret set CV_PRIVATE < private/private.json
+```
+
+`.keys/` is gitignored, so a checkout never has one. Without `CV_KEYS` the build
+**fails** rather than minting fresh keys — otherwise CI would publish bundles
+nobody holds a key for and silently kill every link already sent. Re-run
+`gh secret set CV_KEYS` after every `npm run keys -- add` or `revoke`, or the
+deployed bundles and your local key file drift apart.
+
+Without `CV_PRIVATE` the site deploys with the fictional example data, which is
+a working demo rather than a broken build.
+
+### The repository is public, the private data is not
+
+Publishing the source does not weaken anything: the encryption never depended on
+the source being secret. `private/private.json` and `.keys/` are gitignored and
+have never been committed — worth re-checking before any future history rewrite.
+
+Two consequences of a public repo that are easy to miss:
+
+- **Action logs are public.** An unlock link contains a recipient key in full,
+  so the build prints links only when `CI` is unset. `npm run keys` recovers
+  them locally.
+- **Secrets stay secret.** `CV_KEYS` and `CV_PRIVATE` are not exposed by making
+  the repo public, and GitHub masks their values in logs.
+
+### Base path
+
+GitHub Pages serves a project repo from `/<repo>/`. The workflow passes
+`CV_BASE` from `configure-pages`, and it has to be right at build time: the
+bundle filename is derived from the page path, so a wrong base publishes bundles
+under names no link will ever resolve to. `npm run verify-unlock` runs in CI with
+the same `CV_BASE` and catches exactly that.
+
+For a custom domain, set the domain in the repo's Pages settings and `CV_BASE`
+becomes empty on its own.
+
+`public/robots.txt` disallows the common archive and training crawlers. That is
+politeness, not enforcement.
