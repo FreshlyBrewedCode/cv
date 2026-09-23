@@ -5,6 +5,7 @@
   "private": true,
   "scripts": {
     "dev": "astro dev",
+    "cert": "node scripts/tailscale-cert.mjs",
     "build": "astro build && node scripts/check-leaks.mjs",
     "preview": "astro preview",
     "keys": "node scripts/keys.mjs",

@@ -1,4 +1,5 @@
 import { defineConfig } from 'astro/config';
+import { existsSync, readFileSync } from 'node:fs';
 import encryptVault from './integrations/encrypt-vault.mjs';
 
 /*
@@ -20,6 +21,18 @@ const allowedHosts = (process.env.CV_ALLOWED_HOSTS ?? '.ts.net,.local')
   .map((h) => h.trim())
   .filter(Boolean);
 
+/*
+  `npm run cert` issues a Tailscale-trusted cert for this machine's tailnet
+  hostname into .certs/. Dev server picks it up automatically when present;
+  without it, `astro dev` just falls back to plain HTTP.
+*/
+const certFile = process.env.CV_HTTPS_CERT ?? '.certs/dev.crt';
+const keyFile = process.env.CV_HTTPS_KEY ?? '.certs/dev.key';
+const https =
+  existsSync(certFile) && existsSync(keyFile)
+    ? { cert: readFileSync(certFile), key: readFileSync(keyFile) }
+    : undefined;
+
 export default defineConfig({
   site: process.env.CV_SITE ?? 'http://localhost:4321',
   /* GitHub Pages serves a project repo from /<repo>/. The bundle path is salted
@@ -29,5 +42,9 @@ export default defineConfig({
   integrations: [encryptVault()],
   build: { format: 'directory' },
   devToolbar: { enabled: false },
-  server: { allowedHosts },
+  server: { allowedHosts, port: 4324 },
+  /* HTTPS is a Vite-only server option — Astro's own `server` config has no
+     `https` field, so this has to live here even though `allowedHosts` above
+     can't (see note on `allowedHosts`). Only affects `astro dev`. */
+  vite: { server: { https } },
 });

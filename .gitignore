@@ -2,6 +2,9 @@
 /private/private.json
 /.keys/
 
+# Tailscale-issued dev HTTPS cert/key — machine-specific, regenerate with `npm run cert`.
+/.certs/
+
 node_modules/
 dist/
 .astro/

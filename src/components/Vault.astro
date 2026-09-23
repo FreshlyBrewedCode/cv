@@ -151,4 +151,22 @@
     const next = new URLSearchParams(location.hash.slice(1)).get('k');
     if (next) apply(next);
   });
+
+  /*
+    The build hook that encrypts the private render never runs under `astro
+    dev` (see integrations/encrypt-vault.mjs), so the template below still
+    holds it in plain HTML. `#private` swaps it straight in — no bundle, no
+    crypto, no key needed. Gated on DEV so this never ships.
+  */
+  if (import.meta.env.DEV) {
+    const showPrivate = () => {
+      if (location.hash !== '#private') return;
+      const tpl = document.querySelector<HTMLTemplateElement>('template[data-vault]');
+      if (!tpl) return;
+      document.body.innerHTML = tpl.innerHTML;
+      dispatchEvent(new Event('render'));
+    };
+    showPrivate();
+    addEventListener('hashchange', showPrivate);
+  }
 </script>
