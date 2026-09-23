@@ -53,10 +53,15 @@ print version, so what the browser previews is what you get. It drops the
 language switch, the print button itself and the session bar with its "show the
 public version" control — none of which mean anything on paper — then turns the
 sidebar into a three-column band of facts, because a 16rem rail wastes a third
-of a portrait page. The band keeps the tint it has on screen. The 12mm the text
-sits from the edge of the sheet is split between `@page` and `.wrap` so that it
-can bleed past that text, since a page margin is as far out as a background can
-go on paper.
+of a portrait page. The band keeps the tint it has on screen.
+
+Print with the dialog's default margins. The page itself has no side margin and
+no head margin on the first sheet, because a background cannot be painted into
+a page margin: that 12mm is held by `.wrap` instead, which the band gives back
+to bleed to the paper's edge. Only the vertical margins on continuation pages
+are still `@page`'s — an element's padding is applied once, not once per page —
+so setting margins to "none" in the dialog is the one thing that will run the
+text off the top of page two.
 
 Print spacing is set in millimetres, not rem. On paper `rem` still resolves
 against the 16px screen root, which is arbitrary once there is a physical page —

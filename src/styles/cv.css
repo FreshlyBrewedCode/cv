@@ -456,22 +456,28 @@ a:hover {
   }
 
   /*
-    The text still sits 12mm from the edge of the sheet — the page keeps 6mm of
-    that and `.wrap` holds the rest, so the tinted band can give its 6mm back
-    and bleed past the text without anything else moving. The first sheet gives
-    up most of its head margin for the same reason: the band starts the page.
+    No side margin on the page, and none at the head of the first one: a
+    background cannot be painted into a page margin, so any margin there is a
+    white frame the band cannot cross — and the print dialog's own margin
+    setting would decide how wide that frame is.
+
+    The sheet's margins are held by the elements instead. `.wrap` insets every
+    column by 12mm, which is what the text sits at whatever the dialog is set
+    to, and the band gives that 12mm back to bleed to the paper's edge. Only the
+    vertical margins on continuation pages have to stay on `@page`: an element's
+    padding is applied once, not once per page.
   */
   @page {
-    margin: 14mm 6mm;
+    margin: 14mm 0;
   }
 
   @page :first {
-    margin-top: 6mm;
+    margin-top: 0;
   }
 
   .wrap {
     max-width: none;
-    padding-inline: 6mm;
+    padding-inline: 12mm;
   }
 
   /*
@@ -510,11 +516,10 @@ a:hover {
 
   .rail {
     background: var(--tint);
-    /* Out to the paper's edge where the printer allows it, and clipped at the
-       page area where it doesn't — either way the text below stays aligned
-       with the sections underneath. */
-    margin-inline: -6mm;
-    padding: 6mm;
+    /* Out to three edges of the sheet, with the page's own margins taken back
+       as padding so the text inside stays aligned with the sections below. */
+    margin-inline: -12mm;
+    padding: 12mm 12mm 8mm;
     margin-bottom: 9mm;
   }
 
