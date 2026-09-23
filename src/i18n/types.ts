@@ -56,6 +56,5 @@ export interface Content {
     lock: string;
   };
 
-  colophon: string;
   present: string;
 }

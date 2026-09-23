@@ -32,7 +32,6 @@ export interface View {
   repos: { id: string; lang: string; stars: number; tech: string[]; blurb: string; detail: string; url: string }[];
   writing: { title: string; where: string; note: string; year: string }[];
   references: Reference[];
-  legalName: string | null;
 }
 
 /**
@@ -92,6 +91,5 @@ export function buildView(lang: Lang, mode: Mode): View {
     references: unlocked
       ? priv.references.map((r) => ({ name: r.name, role: r.role[lang], contact: r.contact }))
       : [],
-    legalName: unlocked ? priv.legalName : null,
   };
 }

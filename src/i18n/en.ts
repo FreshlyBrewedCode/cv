@@ -107,7 +107,5 @@ export const en: Content = {
     lock: 'Show the public version',
   },
 
-  colophon:
-    'Some of this page is served encrypted and assembled in your browser. Nothing about it is sent back here.',
   present: 'present',
 };

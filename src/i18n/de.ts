@@ -107,7 +107,5 @@ export const de: Content = {
     lock: 'Öffentliche Fassung anzeigen',
   },
 
-  colophon:
-    'Ein Teil dieser Seite wird verschlüsselt ausgeliefert und erst im Browser zusammengesetzt. Nichts davon geht an diesen Server zurück.',
   present: 'heute',
 };

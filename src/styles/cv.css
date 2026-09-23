@@ -26,15 +26,39 @@
 
   --column: 74rem;
   --gutter: clamp(1.25rem, 5vw, 4rem);
+  --rail-width: 16rem;
+  --layout-pad: clamp(2.25rem, 5vw, 3.5rem);
 
-  /* A light, even gray — just enough to separate the hero and rail from the
-     paper behind them, never enough to compete with the marigold rules. */
+  /* A light, even gray — just enough to separate the rail from the paper beside
+     it, never enough to compete with the marigold rules. */
   --tint: #efeeea;
+
+  /*
+    Where the rail column ends, measured from the left edge of the page. `.wrap`
+    is centred and content-box, so its left margin is whatever is left over once
+    the page has hit its max width, halved; the rail starts one gutter inside
+    that. Percentages here resolve against the background positioning area,
+    which — unlike 100vw — already excludes the scrollbar.
+  */
+  --band: calc(
+    max(0px, (100% - var(--column) - 2 * var(--gutter)) / 2) + var(--gutter) + var(--rail-width)
+  );
 }
 
 body {
   margin: 0;
-  background: var(--paper);
+  /*
+    A faux column. Nothing in the layout spans the whole document — `.rail` is
+    only as tall as its grid row — so the rail's tint is painted here instead,
+    on the one box that is guaranteed to cover the page from the very top to the
+    very bottom, behind the header and past the end of the content.
+  */
+  background-color: var(--paper);
+  background-image: linear-gradient(
+    to right,
+    var(--tint) 0 var(--band),
+    transparent var(--band)
+  );
   color: var(--ink);
   font-family: 'Hanken Grotesk', system-ui, sans-serif;
   font-size: clamp(1rem, 0.35vw + 0.93rem, 1.0625rem);
@@ -121,14 +145,14 @@ a:hover {
 /* ---------- hero ---------- */
 
 /*
-  The name and role moved into the rail, so the hero is just the topline now.
-  It's a plain <header>, with no wrap padding of its own, so a background here
-  bleeds edge to edge for free — the same tint as the rail, forming one
-  continuous panel down the left side and across the top.
+  The name and role moved into the rail, so the hero is just the topline now —
+  a language switch and a print button, floated right over whatever the body's
+  faux column is painting underneath. It carries no background of its own on
+  desktop: the tint belongs to the rail, and a band across the top would only
+  cut the column short.
 */
 .hero {
-  background: var(--tint);
-  padding-block: clamp(1.5rem, 4vw, 2.5rem);
+  padding-block: clamp(1.5rem, 4vw, 2.5rem) 0;
 }
 
 .topline {
@@ -169,40 +193,23 @@ a:hover {
 
 .layout {
   display: grid;
-  grid-template-columns: minmax(0, 16rem) minmax(0, 1fr);
+  grid-template-columns: minmax(0, var(--rail-width)) minmax(0, 1fr);
   gap: clamp(2rem, 5vw, 4.5rem);
-  padding-block: clamp(2.25rem, 5vw, 3.5rem);
+  /* Deeper at the foot than at the head: there is no footer under this, so the
+     last entry would otherwise sit a hair above the end of the page. */
+  padding-block: var(--layout-pad) calc(var(--layout-pad) * 1.6);
 }
 
 /*
-  The tint fills the whole rail column, top to bottom — a full third of the
-  screen on desktop, not a card floating in it. Two layers do the work: `.rail`
-  is a plain grid item (stretched to the column's full height, same as `.main`,
-  by the grid's default align-items) that owns the background; `.rail-sticky`
-  is the shorter box inside it that actually scrolls with the page.
+  `.rail` is a plain grid item, stretched to the row's full height by the grid's
+  default align-items, and `.rail-sticky` is the shorter box inside it that
+  actually scrolls with the page. Nothing here paints: on desktop the body's
+  faux column is already the tint behind this column, which is the only way for
+  it to run the full height of the document rather than of this one row.
 */
 .rail {
   position: relative;
   isolation: isolate;
-}
-
-/*
-  The background lives on a pseudo-element rather than `.rail` itself so it can
-  bleed past the column's own box to the true edge of the viewport — `.rail`
-  sits inside `.wrap`'s padding like everything else, but the tint shouldn't.
-  The formula finds how far that padding-box edge is from the viewport: the
-  gutter, plus half of whatever space is left over once the page has hit its
-  max width.
-*/
-.rail::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  z-index: -1;
-  background: var(--tint);
-  left: calc(-1 * (var(--gutter) + max(0px, (100vw - var(--column)) / 2)));
-  width: calc(var(--gutter) + max(0px, (100vw - var(--column)) / 2) + 16rem);
 }
 
 .rail-sticky {
@@ -257,16 +264,37 @@ a:hover {
 }
 
 @media (max-width: 52rem) {
+  /* One column, so a left-hand band would tint an arbitrary strip of the page.
+     The hero and the rail take the tint back onto themselves here, as one full
+     width panel across the top. */
+  body {
+    background-image: none;
+  }
+
+  .hero {
+    background: var(--tint);
+    padding-block: clamp(1.5rem, 4vw, 2.5rem);
+  }
+
   .layout {
     grid-template-columns: 1fr;
   }
 
-  /* The rail is no longer a fixed-width column here, so the bleed is
-     symmetric: out to both true edges of the viewport, matching the hero
-     bar above it so the two tinted bands read as one continuous panel. */
+  /*
+    The tint bleeds out to both true edges of the viewport — `.rail` sits inside
+    `.wrap`'s padding like everything else, but its background shouldn't — and
+    up through the layout's top padding, so it meets the hero above it with no
+    seam of paper in between.
+  */
   .rail::before {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    background: var(--tint);
+    top: calc(-1 * var(--layout-pad));
+    bottom: 0;
+    left: calc(-1 * var(--gutter));
     right: calc(-1 * var(--gutter));
-    width: auto;
   }
 
   .rail-sticky {
@@ -393,29 +421,13 @@ a:hover {
   margin-bottom: 0.2rem;
 }
 
-/* ---------- colophon ---------- */
-
-.colophon {
-  padding-block: 1.75rem 3.5rem;
-  display: grid;
-  gap: 0.5rem;
-}
-
-.colophon-name {
-  font-size: 0.9375rem;
-}
-
-.colophon .quiet {
-  max-width: 64ch;
-}
-
 /* ---------- print ---------- */
 
 /*
   There is no separate print route. The print button calls window.print(), and
   everything below decides what the printed page is: the language switch, the
-  print button itself, the session bar with its "show the public version" link
-  and the footer all go, because none of them mean anything on paper.
+  print button itself and the session bar with its "show the public version"
+  link all go, because none of them mean anything on paper.
 
   Whatever version is on screen is what prints — unlock first if you want the
   private one.
@@ -436,8 +448,7 @@ a:hover {
   }
 
   .topline,
-  .session,
-  .colophon {
+  .session {
     display: none;
   }
 

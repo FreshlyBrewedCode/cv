@@ -50,10 +50,10 @@ tailscale serve --https=8443 off             # to undo
 The printer button in the header calls `window.print()`. There is no separate
 print route: the `@media print` block at the end of `src/styles/cv.css` is the
 print version, so what the browser previews is what you get. It drops the
-language switch, the print button itself, the session bar with its "show the
-public version" control and the footer — none of which mean anything on paper —
-then turns the sidebar into a three-column band of facts, because a 16rem rail
-wastes a third of a portrait page.
+language switch, the print button itself and the session bar with its "show the
+public version" control — none of which mean anything on paper — then turns the
+sidebar into a three-column band of facts, because a 16rem rail wastes a third
+of a portrait page.
 
 Print spacing is set in millimetres, not rem. On paper `rem` still resolves
 against the 16px screen root, which is arbitrary once there is a physical page —

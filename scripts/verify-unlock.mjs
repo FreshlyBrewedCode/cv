@@ -75,7 +75,6 @@ for (const { lang, url, dist } of pages) {
   if (!html) fail(`no bundle for ${url} — did the build run, with the same CV_BASE?`);
 
   const expect = [
-    priv.legalName,
     priv.email,
     priv.phone,
     priv.employer.name,

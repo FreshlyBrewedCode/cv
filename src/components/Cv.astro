@@ -183,16 +183,11 @@ const factIcons: Record<FactKey, string> = {
   </main>
 </div>
 
-<footer class="wrap colophon">
-  <p class="colophon-name">{v.legalName ?? c.name}</p>
-  {v.unlocked && <p class="quiet">{c.colophon}</p>}
-</footer>
-
 <script>
   /**
    * The print button. There is no separate print route: the print stylesheet
-   * drops the language switch, this button, the session bar and the footer, so
-   * what the dialog previews already is the print version.
+   * drops the language switch, this button and the session bar, so what the
+   * dialog previews already is the print version.
    *
    * Rebinds on `render` because unlocking replaces the whole body.
    */
