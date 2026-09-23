@@ -116,7 +116,10 @@
     }
   }
 
-  const lock = () => location.replace(location.pathname + location.search);
+  const bare = () => location.pathname + location.search;
+
+  /* A new history entry, so Back returns to the keyed URL and its full version. */
+  const lock = () => location.assign(bare());
 
   function wire() {
     document.querySelector('[data-lock]')?.addEventListener('click', lock);
@@ -136,7 +139,7 @@
   addEventListener('hashchange', () => {
     const next = supplied();
     if (next) apply(next);
-    else if (current) lock();
+    else if (current) location.replace(bare());
   });
 
   /*
