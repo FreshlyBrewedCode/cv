@@ -5,7 +5,10 @@ import { priv } from '../data/private';
 
 export type Mode = 'public' | 'private';
 
+export type FactKey = 'based' | 'email' | 'phone' | 'address' | 'github' | 'since' | 'available' | 'rate';
+
 export interface Fact {
+  key: FactKey;
   label: string;
   value: string;
   href?: string;
@@ -43,27 +46,27 @@ export function buildView(lang: Lang, mode: Mode): View {
   const c = locales[lang];
   const unlocked = mode === 'private';
 
-  const facts: Fact[] = [{ label: c.rail.based, value: c.city }];
+  const facts: Fact[] = [{ key: 'based', label: c.rail.based, value: c.city }];
 
   if (unlocked) {
     facts.push(
-      { label: c.rail.email, value: priv.email, href: `mailto:${priv.email}` },
-      { label: c.rail.phone, value: priv.phone },
-      { label: c.rail.address, value: `${priv.address.street}, ${priv.address.postal}` },
+      { key: 'email', label: c.rail.email, value: priv.email, href: `mailto:${priv.email}` },
+      { key: 'phone', label: c.rail.phone, value: priv.phone },
+      { key: 'address', label: c.rail.address, value: `${priv.address.street}, ${priv.address.postal}` },
     );
   } else {
-    facts.push({ label: c.rail.email, value: c.publicEmail, href: `mailto:${c.publicEmail}` });
+    facts.push({ key: 'email', label: c.rail.email, value: c.publicEmail, href: `mailto:${c.publicEmail}` });
   }
 
   facts.push(
-    { label: c.rail.github, value: `github.com/${handle}`, href: `https://github.com/${handle}` },
-    { label: c.rail.since, value: String(workingSince) },
+    { key: 'github', label: c.rail.github, value: `github.com/${handle}`, href: `https://github.com/${handle}` },
+    { key: 'since', label: c.rail.since, value: String(workingSince) },
   );
 
   if (unlocked) {
     facts.push(
-      { label: c.rail.available, value: priv.availability[lang] },
-      { label: c.rail.rate, value: priv.compensation[lang] },
+      { key: 'available', label: c.rail.available, value: priv.availability[lang] },
+      { key: 'rate', label: c.rail.rate, value: priv.compensation[lang] },
     );
   }
 

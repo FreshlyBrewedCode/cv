@@ -6,7 +6,7 @@
  * the public output has no gaps and no markers.
  */
 import Icon from './Icon.astro';
-import { buildView, type Mode } from '../lib/view';
+import { buildView, type Mode, type FactKey } from '../lib/view';
 import { other, locales, localeHref } from '../i18n';
 import type { Lang } from '../i18n/types';
 import { handle, stars } from '../data/shared';
@@ -29,6 +29,18 @@ const icons = {
   writing: 'pen-line',
   references: 'user-check',
 };
+
+/** One icon per rail fact, named for what the fact actually holds. */
+const factIcons: Record<FactKey, string> = {
+  based: 'map-pin',
+  email: 'mail',
+  phone: 'phone',
+  address: 'home',
+  github: 'git-branch',
+  since: 'calendar',
+  available: 'calendar-check',
+  rate: 'wallet',
+};
 ---
 
 <header class="hero">
@@ -42,19 +54,22 @@ const icons = {
         <span class="visually-hidden">{c.actions.print}</span>
       </button>
     </p>
-
-    <h1 class="name">{c.name}</h1>
-    <p class="role">{c.headline}, {c.city}</p>
   </div>
 </header>
 
 <div class="wrap layout">
   <aside class="rail">
+    <h1 class="name">{c.name}</h1>
+    <p class="role">{c.headline}, {c.city}</p>
+
     <dl class="facts">
       {
         v.facts.map((f) => (
           <div class="fact">
-            <dt>{f.label}</dt>
+            <dt>
+              <Icon name={factIcons[f.key]} />
+              {f.label}
+            </dt>
             <dd>{f.href ? <a href={f.href}>{f.value}</a> : f.value}</dd>
           </div>
         ))

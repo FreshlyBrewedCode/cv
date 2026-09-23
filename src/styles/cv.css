@@ -26,6 +26,10 @@
 
   --column: 74rem;
   --gutter: clamp(1.25rem, 5vw, 4rem);
+
+  /* Halfway between paper and rule: enough to read as a distinct panel behind
+     the rail, never enough to compete with the marigold rules for attention. */
+  --rail-bg: #e7e5de;
 }
 
 body {
@@ -116,8 +120,8 @@ a:hover {
 
 /* ---------- hero ---------- */
 
-/* No bottom padding: the layout below supplies the gap, and doubling them left
-   a void where the constellation used to be. */
+/* The name and role moved into the rail, so the hero is just the topline now —
+   its own bottom padding would double up with the layout's top padding. */
 .hero {
   padding-block: clamp(1.5rem, 4vw, 2.5rem) 0;
 }
@@ -127,7 +131,6 @@ a:hover {
   justify-content: flex-end;
   align-items: center;
   gap: 1rem;
-  margin-bottom: clamp(1.5rem, 5vw, 3.5rem);
 }
 
 .switch {
@@ -137,24 +140,24 @@ a:hover {
 
 /*
   The marigold rule is the page's one recurring device: it sits under every
-  heading, thickest under the name. That puts the accent in the hero — where the
-  palette otherwise has nothing but paper and ink — without asking a 2:1 colour
-  to carry any meaning.
+  heading, thickest under the name. Sized for the rail column rather than the
+  full page width now that the name lives there.
 */
 .name {
-  font-size: clamp(2.5rem, 9.5vw, 5.5rem);
+  font-size: clamp(1.75rem, 8vw, 2.25rem);
   font-weight: 800;
   letter-spacing: -0.04em;
   width: fit-content;
   max-width: 100%;
   padding-bottom: 0.06em;
   border-bottom: 0.11em solid var(--marigold);
-  margin-bottom: 0.7rem;
+  margin-bottom: 0.6rem;
 }
 
 .role {
-  font-size: clamp(1.0625rem, 1.7vw, 1.375rem);
+  font-size: 1rem;
   color: var(--muted);
+  margin-bottom: 1.75rem;
 }
 
 /* ---------- body layout ---------- */
@@ -166,10 +169,22 @@ a:hover {
   padding-block: clamp(2.25rem, 5vw, 3.5rem);
 }
 
+/*
+  A quietly distinct panel — just enough tint to separate the overview from the
+  content column, never dark enough to compete with it. Sticky and tinted on
+  desktop only; on narrow screens and in print it flattens back into the page.
+*/
 .rail {
+  /* Grid items stretch to the row's full height by default, which is as tall
+     as .main — leaving a sticky element with nowhere to actually stick.
+     align-self shrinks it back to its own content so it can. */
+  align-self: start;
   position: sticky;
   top: 2rem;
   font-size: 0.9375rem;
+  background: var(--rail-bg);
+  border-radius: 0.75rem;
+  padding: 1.5rem 1.5rem 1.75rem;
 }
 
 .facts {
@@ -178,9 +193,17 @@ a:hover {
 }
 
 .fact dt {
+  display: flex;
+  align-items: center;
+  gap: 0.4em;
   color: var(--muted);
   font-size: 0.8125rem;
   margin-bottom: 0.15rem;
+}
+
+.fact dt .icon {
+  width: 0.9em;
+  height: 0.9em;
 }
 
 .session {
@@ -215,6 +238,13 @@ a:hover {
 
   .rail {
     position: static;
+    background: none;
+    border-radius: 0;
+    padding: 0;
+  }
+
+  .name {
+    font-size: clamp(2.5rem, 9.5vw, 3.5rem);
   }
 
   .facts {
@@ -409,10 +439,19 @@ a:hover {
 
   .role {
     font-size: 11pt;
+    margin-bottom: 3mm;
   }
 
   /* The rail becomes a band of facts above the content: a 16rem sidebar wastes
-     a third of a portrait page. */
+     a third of a portrait page, and the screen's sticky tint is meaningless on
+     paper. */
+  .rail {
+    position: static;
+    background: none;
+    border-radius: 0;
+    padding: 0;
+  }
+
   .layout {
     display: block;
     padding-block: 7mm 0;
