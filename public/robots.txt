@@ -1,0 +1,13 @@
+# Nothing links to the encrypted bundles, so listing their directory here would
+# only advertise it. The AI and archive crawlers are the point of this file.
+User-agent: ia_archiver
+Disallow: /
+
+User-agent: GPTBot
+Disallow: /
+
+User-agent: CCBot
+Disallow: /
+
+User-agent: ClaudeBot
+Disallow: /

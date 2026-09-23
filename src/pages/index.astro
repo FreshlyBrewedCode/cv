@@ -1,0 +1,13 @@
+---
+import Base from '../layouts/Base.astro';
+import Cv from '../components/Cv.astro';
+
+const lang = 'en' as const;
+---
+
+<Base lang={lang}>
+  <Cv lang={lang} mode="public" />
+
+  {/* Lifted out, encrypted and deleted by the build. Present only in dev. */}
+  <template data-vault><Cv lang={lang} mode="private" /></template>
+</Base>

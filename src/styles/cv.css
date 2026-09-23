@@ -1,0 +1,480 @@
+/*
+  ------------------------------------------------------------------
+  Colour   paper #F7F7F4 · ink #232022 · muted #6E6A63 · oxblood #8C2F27
+           marigold #E5A00D
+  Type     Bricolage Grotesque (display) + Hanken Grotesk (prose)
+  Layout   A quiet hero, then a narrow left rail of facts against a wide content
+           column. Left-aligned throughout; the rail is what stops it reading as
+           one more centred column.
+
+  Rules    The only horizontal rule on the page is the marigold one under a
+           heading, and it is exactly as wide as the heading it belongs to.
+           Entries are separated by space, never by a border — which means the
+           spacing scale is doing real work and has to stay generous.
+
+  On marigold: at 2:1 against paper it can never carry text, so it only ever
+  appears as a rule or as a highlight behind ink, never as ink itself.
+*/
+
+:root {
+  --paper: #f7f7f4;
+  --ink: #232022;
+  --rule: #d6d2c8;
+  --muted: #6e6a63;
+  --oxblood: #8c2f27;
+  --marigold: #e5a00d;
+
+  --column: 74rem;
+  --gutter: clamp(1.25rem, 5vw, 4rem);
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: 'Hanken Grotesk', system-ui, sans-serif;
+  font-size: clamp(1rem, 0.35vw + 0.93rem, 1.0625rem);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+.display {
+  font-family: 'Bricolage Grotesque', 'Hanken Grotesk', sans-serif;
+  font-weight: 700;
+  line-height: 1.02;
+  letter-spacing: -0.02em;
+}
+
+/* Zero-specificity reset so single-class rules can still set their own margin.
+   Writing this as `h2 { margin: 0 }` is fine, but `.name`-style classes must
+   win, and :where() guarantees it regardless of source order. */
+:where(h1, h2, h3, p, dl, dd, figure) {
+  margin: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration-color: var(--oxblood);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+}
+
+a:hover {
+  background: var(--marigold);
+  text-decoration-color: var(--ink);
+}
+
+:focus-visible {
+  outline: 2px solid var(--oxblood);
+  outline-offset: 3px;
+}
+
+.wrap {
+  max-width: var(--column);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* ---------- icons ---------- */
+
+.icon {
+  width: 1em;
+  height: 1em;
+  flex: 0 0 auto;
+  /* Lucide is drawn on a 24px grid at stroke-width 2; scaled down to cap height
+     beside a heading, that reads heavier than the type next to it. */
+  stroke-width: 1.75;
+}
+
+.icon-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  /* Sized as a target rather than to the glyph: an icon-only control still has
+     to be comfortably hittable. */
+  min-width: 2.5rem;
+  min-height: 2.5rem;
+  padding: 0.5em;
+  line-height: 1;
+  font-size: 1.125rem;
+  color: var(--ink);
+}
+
+/* ---------- hero ---------- */
+
+/* No bottom padding: the layout below supplies the gap, and doubling them left
+   a void where the constellation used to be. */
+.hero {
+  padding-block: clamp(1.5rem, 4vw, 2.5rem) 0;
+}
+
+.topline {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: clamp(1.5rem, 5vw, 3.5rem);
+}
+
+.switch {
+  font-size: 0.875rem;
+  padding: 0.2em 0.5em;
+}
+
+/*
+  The marigold rule is the page's one recurring device: it sits under every
+  heading, thickest under the name. That puts the accent in the hero — where the
+  palette otherwise has nothing but paper and ink — without asking a 2:1 colour
+  to carry any meaning.
+*/
+.name {
+  font-size: clamp(2.5rem, 9.5vw, 5.5rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  width: fit-content;
+  max-width: 100%;
+  padding-bottom: 0.06em;
+  border-bottom: 0.11em solid var(--marigold);
+  margin-bottom: 0.7rem;
+}
+
+.role {
+  font-size: clamp(1.0625rem, 1.7vw, 1.375rem);
+  color: var(--muted);
+}
+
+/* ---------- body layout ---------- */
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 16rem) minmax(0, 1fr);
+  gap: clamp(2rem, 5vw, 4.5rem);
+  padding-block: clamp(2.25rem, 5vw, 3.5rem);
+}
+
+.rail {
+  position: sticky;
+  top: 2rem;
+  font-size: 0.9375rem;
+}
+
+.facts {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.fact dt {
+  color: var(--muted);
+  font-size: 0.8125rem;
+  margin-bottom: 0.15rem;
+}
+
+.session {
+  margin-top: 2.5rem;
+  color: var(--muted);
+  font-size: 0.875rem;
+  display: grid;
+  gap: 0.75rem;
+  justify-items: start;
+}
+
+.button {
+  font: inherit;
+  font-size: 0.875rem;
+  color: var(--ink);
+  background: transparent;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  padding: 0.35em 0.9em;
+  cursor: pointer;
+}
+
+.button:hover {
+  background: var(--marigold);
+  border-color: var(--marigold);
+}
+
+@media (max-width: 52rem) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+
+  .rail {
+    position: static;
+  }
+
+  .facts {
+    grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+  }
+}
+
+/* ---------- sections ---------- */
+
+.main {
+  display: grid;
+  gap: clamp(2.75rem, 6vw, 4.5rem);
+  min-width: 0;
+}
+
+/*
+  The one structural device: a marigold rule under every section heading. It is
+  the same joining rule Ledger used, promoted to the accent so the page has one
+  recurring bright element.
+*/
+.h2 {
+  /* fit-content, so the rule underneath measures the heading rather than the
+     column. On a narrow screen it still wraps and the rule follows. */
+  display: flex;
+  width: fit-content;
+  max-width: 100%;
+  align-items: center;
+  gap: 0.5em;
+  font-size: clamp(1.375rem, 2.6vw, 1.875rem);
+  padding-bottom: 0.65rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 3px solid var(--marigold);
+}
+
+.h2 .icon {
+  /* Optically smaller than cap height, so the icon supports the heading rather
+     than competing with it. */
+  width: 0.78em;
+  height: 0.78em;
+  color: var(--ink);
+}
+
+.prose {
+  max-width: 62ch;
+}
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 2.5rem;
+}
+
+.list-after {
+  margin-top: 1.75rem;
+}
+
+.item {
+  scroll-margin-top: 2rem;
+}
+
+.item h3 {
+  font-size: 1.1875rem;
+  margin-bottom: 0.4rem;
+}
+
+.item p {
+  max-width: 62ch;
+  margin-bottom: 0.5rem;
+}
+
+.item p:last-child {
+  margin-bottom: 0;
+}
+
+.when {
+  color: var(--muted);
+  font-size: 0.875rem;
+  font-variant-numeric: tabular-nums;
+  margin-bottom: 0.35rem;
+}
+
+.quiet {
+  color: var(--muted);
+  font-size: 0.9375rem;
+}
+
+.link {
+  margin-top: 0.6rem;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem 1rem;
+  list-style: none;
+  margin: 0.6rem 0 0;
+  padding: 0;
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+
+.refs {
+  display: grid;
+  gap: 1.25rem;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.refs h3 {
+  font-size: 1.0625rem;
+  margin-bottom: 0.2rem;
+}
+
+/* ---------- colophon ---------- */
+
+.colophon {
+  padding-block: 1.75rem 3.5rem;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.colophon-name {
+  font-size: 0.9375rem;
+}
+
+.colophon .quiet {
+  max-width: 64ch;
+}
+
+/* ---------- print ---------- */
+
+/*
+  There is no separate print route. The print button calls window.print(), and
+  everything below decides what the printed page is: the language switch, the
+  print button itself, the session bar with its "show the public version" link
+  and the footer all go, because none of them mean anything on paper.
+
+  Whatever version is on screen is what prints — unlock first if you want the
+  private one.
+*/
+@media print {
+  :root {
+    --paper: #fff;
+  }
+
+  body {
+    background: #fff;
+    font-size: 10.5pt;
+    line-height: 1.45;
+    /* The marigold heading rules carry the page's structure, so they have to
+       survive the browser's default of dropping backgrounds. */
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+
+  .topline,
+  .session,
+  .colophon {
+    display: none;
+  }
+
+  @page {
+    margin: 14mm 12mm;
+  }
+
+  .wrap {
+    max-width: none;
+    padding-inline: 0;
+  }
+
+  /*
+    Spacing below is in millimetres, not rem. On paper `rem` still resolves
+    against the 16px screen root, which is an arbitrary size once there is a
+    physical page — and it made the print sheet noticeably tighter than the site
+    even though both claimed the same numbers. These keep roughly the site's
+    proportions (section : entry : heading ≈ 2.5 : 1.4 : 1) at a page-sized
+    scale.
+  */
+  .hero {
+    padding-block: 0;
+  }
+
+  .name {
+    font-size: 26pt;
+    border-bottom-width: 3pt;
+    margin-bottom: 2mm;
+  }
+
+  .role {
+    font-size: 11pt;
+  }
+
+  /* The rail becomes a band of facts above the content: a 16rem sidebar wastes
+     a third of a portrait page. */
+  .layout {
+    display: block;
+    padding-block: 7mm 0;
+  }
+
+  .facts {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 3mm 8mm;
+    margin-bottom: 9mm;
+  }
+
+  .main {
+    gap: 10mm;
+  }
+
+  .h2 {
+    font-size: 13pt;
+    padding-bottom: 1.5mm;
+    margin-bottom: 4mm;
+    border-bottom-width: 2pt;
+    break-after: avoid;
+  }
+
+  .list {
+    gap: 5.5mm;
+  }
+
+  .list-after {
+    margin-top: 5mm;
+  }
+
+  .item {
+    break-inside: avoid;
+  }
+
+  .link {
+    margin-top: 2mm;
+  }
+
+  /* A line stranded alone at a page break reads as a mistake. */
+  p {
+    orphans: 2;
+    widows: 2;
+  }
+
+  .item h3 {
+    font-size: 11pt;
+  }
+
+  .quiet,
+  .when,
+  .tags {
+    font-size: 9pt;
+  }
+
+  /* Underlines on every URL turn a printed page into a rash; the text of each
+     link is already the address. */
+  a {
+    text-decoration: none;
+  }
+
+  section {
+    break-inside: auto;
+  }
+}

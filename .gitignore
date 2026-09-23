@@ -1,0 +1,11 @@
+# Never commit real private CV data or the keys that unlock it.
+/private/private.json
+/.keys/
+
+node_modules/
+dist/
+.astro/
+.DS_Store
+
+# playwright-cli scratch
+.playwright-cli/

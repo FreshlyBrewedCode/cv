@@ -1,0 +1,19 @@
+{
+  "name": "cv",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build && node scripts/check-leaks.mjs",
+    "preview": "astro preview",
+    "keys": "node scripts/keys.mjs",
+    "check-leaks": "node scripts/check-leaks.mjs",
+    "verify-unlock": "node scripts/verify-unlock.mjs"
+  },
+  "dependencies": {
+    "astro": "^5.14.1",
+    "lucide-static": "^1.47.0",
+    "node-html-parser": "^7.0.1"
+  }
+}

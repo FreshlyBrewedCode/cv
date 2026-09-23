@@ -1,0 +1,33 @@
+---
+/**
+ * Inlines a Lucide icon at build time.
+ *
+ * Read from disk rather than imported so no icon runtime ships, and stripped of
+ * its own width/height so size comes from CSS. Lucide already draws with
+ * `currentColor`, so an icon takes the colour of whatever it sits next to.
+ *
+ * Icons here are decorative: every one sits beside a heading that already says
+ * the same thing, so they are hidden from assistive technology rather than
+ * given a label that would be read out twice.
+ */
+import fs from 'node:fs';
+
+interface Props {
+  name: string;
+  class?: string;
+}
+
+const { name, class: className } = Astro.props;
+
+const file = new URL(`../../node_modules/lucide-static/icons/${name}.svg`, import.meta.url);
+if (!fs.existsSync(file)) throw new Error(`Icon "${name}" is not in lucide-static`);
+
+const svg = fs
+  .readFileSync(file, 'utf8')
+  .replace(/<!--[\s\S]*?-->/g, '')
+  .replace(/\s(width|height|class)="[^"]*"/g, '')
+  .replace('<svg', `<svg class="icon ${className ?? ''}" aria-hidden="true" focusable="false"`)
+  .trim();
+---
+
+<Fragment set:html={svg} />

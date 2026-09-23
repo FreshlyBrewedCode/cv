@@ -1,0 +1,89 @@
+name: Build and deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# The repo is private; Pages is public. That is the intended shape — the public
+# CV is meant to be read, and the private version only ships as ciphertext.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Never deploy two commits at once, but let a run in progress finish so a
+# half-written set of bundles is never live.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - uses: actions/configure-pages@v5
+        id: pages
+
+      - name: Restore keys and private data
+        env:
+          # .keys/keys.json — without it the build fails rather than minting new
+          # keys, which would publish bundles nobody holds a key for and kill
+          # every link already sent.
+          CV_KEYS: ${{ secrets.CV_KEYS }}
+          # private/private.json — optional. Absent, the build uses the example
+          # data, which is fictional, and the site deploys as a working demo.
+          CV_PRIVATE: ${{ secrets.CV_PRIVATE }}
+        run: |
+          if [ -z "$CV_KEYS" ]; then
+            echo "::error::CV_KEYS secret is not set. See README, 'Deploying'."
+            exit 1
+          fi
+          mkdir -p .keys
+          printf '%s' "$CV_KEYS" > .keys/keys.json
+          chmod 600 .keys/keys.json
+          if [ -n "$CV_PRIVATE" ]; then
+            printf '%s' "$CV_PRIVATE" > private/private.json
+          else
+            echo "::warning::CV_PRIVATE is not set — deploying with example data."
+          fi
+
+      - run: npm ci
+
+      # `npm run build` ends in the leak check, which fails the build if any
+      # private string is readable in dist/ or a public page references the
+      # bundles. That gate is the reason this is safe to run unattended.
+      - name: Build
+        env:
+          CV_SITE: ${{ steps.pages.outputs.origin }}
+          CV_BASE: ${{ steps.pages.outputs.base_path }}
+        run: npm run build
+
+      # Decrypt the built bundles as a recipient would, and confirm the public
+      # pages contain none of it. Catches a broken base path, which otherwise
+      # deploys silently and leaves every link opening the public page.
+      - name: Verify the private version decrypts
+        env:
+          CV_BASE: ${{ steps.pages.outputs.base_path }}
+        run: npm run verify-unlock
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/deploy-pages@v4
+        id: deployment

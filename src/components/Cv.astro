@@ -1,0 +1,188 @@
+---
+/**
+ * The whole CV. Rendered twice per page — once public, once private — from a
+ * view that decides what each mode contains. The component itself knows nothing
+ * about encryption: it just renders whatever the view hands it, which is why
+ * the public output has no gaps and no markers.
+ */
+import Icon from './Icon.astro';
+import { buildView, type Mode } from '../lib/view';
+import { other, locales, localeHref } from '../i18n';
+import type { Lang } from '../i18n/types';
+import { handle, stars } from '../data/shared';
+
+interface Props {
+  lang: Lang;
+  mode: Mode;
+}
+
+const { lang, mode } = Astro.props;
+const v = buildView(lang, mode);
+const c = v.c;
+const alt = locales[other(lang)];
+
+/** One icon per main section, named for what the section actually holds. */
+const icons = {
+  about: 'layers',
+  projects: 'waypoints',
+  work: 'briefcase',
+  writing: 'pen-line',
+  references: 'user-check',
+};
+---
+
+<header class="hero">
+  <div class="wrap">
+    <p class="topline">
+      <a class="switch" href={localeHref(alt.base)} hreflang={alt.htmlLang} lang={alt.htmlLang}>
+        {c.switchLabel}
+      </a>
+      <button type="button" class="button icon-button" data-print title={c.actions.print}>
+        <Icon name="printer" />
+        <span class="visually-hidden">{c.actions.print}</span>
+      </button>
+    </p>
+
+    <h1 class="name">{c.name}</h1>
+    <p class="role">{c.headline}, {c.city}</p>
+  </div>
+</header>
+
+<div class="wrap layout">
+  <aside class="rail">
+    <dl class="facts">
+      {
+        v.facts.map((f) => (
+          <div class="fact">
+            <dt>{f.label}</dt>
+            <dd>{f.href ? <a href={f.href}>{f.value}</a> : f.value}</dd>
+          </div>
+        ))
+      }
+    </dl>
+
+    {
+      v.unlocked && (
+        <p class="session">
+          <span>{c.vault.unlocked}</span>
+          <button type="button" class="button" data-lock>
+            {c.vault.lock}
+          </button>
+        </p>
+      )
+    }
+  </aside>
+
+  <main class="main">
+    <section aria-labelledby="about">
+      <h2 class="h2" id="about"><Icon name={icons.about} />{c.sections.about}</h2>
+      <p class="prose">{c.intro}</p>
+    </section>
+
+    <section aria-labelledby="projects">
+      <h2 class="h2" id="projects"><Icon name={icons.projects} />{c.sections.projects}</h2>
+      <ul class="list">
+        {
+          v.repos.map((r) => (
+            <li class="item" id={`p-${r.id}`}>
+              <p class="when">
+                {r.lang}, {stars(r.stars)} {c.starsLabel}
+              </p>
+              <h3>{r.id}</h3>
+              <p>{r.blurb}</p>
+              <p class="quiet">{r.detail}</p>
+              <ul class="tags">
+                {r.tech.map((t) => (
+                  <li>{t}</li>
+                ))}
+              </ul>
+              <p class="quiet link">
+                <a href={r.url}>
+                  github.com/{handle}/{r.id}
+                </a>
+              </p>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <section aria-labelledby="work">
+      <h2 class="h2" id="work"><Icon name={icons.work} />{c.sections.work}</h2>
+      <p class="prose">{v.workLede}</p>
+      <ul class="list list-after">
+        {
+          v.roles.map((role) => (
+            <li class="item">
+              <p class="when">
+                {role.from}–{role.to}
+              </p>
+              <h3>{role.title}</h3>
+              <p>{role.body}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <section aria-labelledby="writing">
+      <h2 class="h2" id="writing"><Icon name={icons.writing} />{c.sections.writing}</h2>
+      <ul class="list">
+        {
+          v.writing.map((w) => (
+            <li class="item">
+              <p class="when">
+                {w.where}, {w.year}
+              </p>
+              <h3>{w.title}</h3>
+              <p class="quiet">{w.note}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    {
+      v.references.length > 0 && (
+        <section aria-labelledby="refs">
+          <h2 class="h2" id="refs">
+            <Icon name={icons.references} />
+            {c.sections.references}
+          </h2>
+          <ul class="refs">
+            {v.references.map((r) => (
+              <li>
+                <h3>{r.name}</h3>
+                <p class="quiet">{r.role}</p>
+                <p class="quiet">
+                  <a href={`mailto:${r.contact}`}>{r.contact}</a>
+                </p>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
+  </main>
+</div>
+
+<footer class="wrap colophon">
+  <p class="colophon-name">{v.legalName ?? c.name}</p>
+  {v.unlocked && <p class="quiet">{c.colophon}</p>}
+</footer>
+
+<script>
+  /**
+   * The print button. There is no separate print route: the print stylesheet
+   * drops the language switch, this button, the session bar and the footer, so
+   * what the dialog previews already is the print version.
+   *
+   * Rebinds on `render` because unlocking replaces the whole body.
+   */
+  function wire() {
+    document.querySelector('[data-print]')?.addEventListener('click', () => window.print());
+  }
+
+  addEventListener('render', wire);
+  wire();
+</script>

@@ -1,0 +1,154 @@
+---
+/**
+ * The only part of the mechanism present on a public page.
+ *
+ * With no key in the fragment it does nothing at all — no request, no DOM
+ * change, no markup. With a key it derives the bundle's filename, fetches it,
+ * and replaces the body with the decrypted version.
+ *
+ * It deliberately carries no strings that describe what it is for, and fails
+ * silently on the page: a revoked link shows the ordinary public page rather
+ * than an error that would announce a private version exists. Tell recipients
+ * out of band if you rotate keys.
+ *
+ * Silent on the page, not silent everywhere — it warns to the console with a
+ * numeric code, which nothing renders and no crawler reads, because otherwise
+ * every failure looks identical to "no key supplied":
+ *
+ *   1  no WebCrypto: the page is not a secure context, so serve it over HTTPS
+ *   2  the key is not 32 bytes of base64url
+ *   3  no bundle for this key and page — revoked, or a stale link
+ *   4  the bundle did not decrypt or authenticate
+ *
+ * This is the limit of the hiding. Someone reading the page source will find
+ * this script. What it protects is that the page does not advertise itself, and
+ * that the private content is never served to anyone without a key.
+ */
+---
+
+<script>
+  const STORE = 'a';
+  const DIR = '_a';
+  const enc = new TextEncoder();
+
+  const root = `${import.meta.env.BASE_URL.replace(/\/$/, '')}/`;
+
+  function raw(value: string) {
+    const b64 = value.replace(/-/g, '+').replace(/_/g, '/');
+    return Uint8Array.from(atob(b64 + '='.repeat((4 - (b64.length % 4)) % 4)), (c) =>
+      c.charCodeAt(0),
+    );
+  }
+
+  function url(bytes: Uint8Array) {
+    return btoa(String.fromCharCode(...bytes))
+      .replace(/\+/g, '-')
+      .replace(/\//g, '_')
+      .replace(/=+$/, '');
+  }
+
+  async function bits(material: Uint8Array, salt: string, info: string, length: number) {
+    const base = await crypto.subtle.importKey('raw', material, 'HKDF', false, ['deriveBits']);
+    return new Uint8Array(
+      await crypto.subtle.deriveBits(
+        { name: 'HKDF', hash: 'SHA-256', salt: enc.encode(salt), info: enc.encode(info) },
+        base,
+        length * 8,
+      ),
+    );
+  }
+
+  /* Must match the salt the build used, including any deployed base path. */
+  function here() {
+    const p = location.pathname;
+    return p.endsWith('/') ? p : `${p}/`;
+  }
+
+  function keep(value: string) {
+    try {
+      sessionStorage.setItem(STORE, value);
+    } catch {
+      /* storage can be unavailable; costs a re-visit of the link at worst */
+    }
+  }
+
+  function held() {
+    try {
+      return sessionStorage.getItem(STORE) ?? '';
+    } catch {
+      return '';
+    }
+  }
+
+  function drop() {
+    try {
+      sessionStorage.removeItem(STORE);
+    } catch {
+      /* ignore */
+    }
+  }
+
+  const note = (code: number) => console.warn('cv', code);
+
+  async function apply(value: string) {
+    const trimmed = value.trim();
+    if (!trimmed) return;
+
+    /* Plain HTTP on anything but localhost leaves crypto.subtle undefined. */
+    if (!globalThis.crypto?.subtle) return note(1);
+
+    const path = here();
+    let material: Uint8Array;
+    try {
+      material = raw(trimmed);
+      if (material.length !== 32) return note(2);
+    } catch {
+      return note(2);
+    }
+
+    try {
+      const id = url(await bits(material, path, 'cv/id/v1', 16));
+      const res = await fetch(`${root}${DIR}/${id}.json`, { cache: 'no-cache' });
+      if (!res.ok) return note(3);
+
+      const { iv, ct } = await res.json();
+      const key = await crypto.subtle.importKey(
+        'raw',
+        await bits(material, path, 'cv/body/v1', 32),
+        'AES-GCM',
+        false,
+        ['decrypt'],
+      );
+      const plain = await crypto.subtle.decrypt(
+        { name: 'AES-GCM', iv: raw(iv), additionalData: enc.encode(path) },
+        key,
+        raw(ct),
+      );
+
+      document.body.innerHTML = new TextDecoder().decode(plain);
+      keep(trimmed);
+      dispatchEvent(new Event('render'));
+    } catch {
+      note(4);
+    }
+  }
+
+  function wire() {
+    document.querySelector('[data-lock]')?.addEventListener('click', () => {
+      drop();
+      location.replace(location.pathname + location.search);
+    });
+  }
+
+  addEventListener('render', wire);
+  wire();
+
+  const supplied = new URLSearchParams(location.hash.slice(1)).get('k');
+  const carried = supplied || held();
+  if (carried) apply(carried);
+
+  addEventListener('hashchange', () => {
+    const next = new URLSearchParams(location.hash.slice(1)).get('k');
+    if (next) apply(next);
+  });
+</script>

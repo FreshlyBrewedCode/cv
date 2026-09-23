@@ -1,0 +1,39 @@
+{
+  "legalName": "Arvid Erik Lindqvist",
+  "email": "ari@lindqvist.dev",
+  "phone": "+46 70 555 01 23",
+  "address": {
+    "street": "Kungsgatan 42, 4 tr",
+    "postal": "411 15 Göteborg"
+  },
+  "employer": {
+    "name": "Kestrel Freight Systems AB",
+    "site": "kestrelfreight.se"
+  },
+  "availability": {
+    "en": "Open to senior and staff roles from March 2026. Remote-first, CET±2, up to one week per month on site.",
+    "de": "Offen für Senior- und Staff-Rollen ab März 2026. Remote-first, MEZ±2, bis zu einer Woche pro Monat vor Ort."
+  },
+  "compensation": {
+    "en": "Targeting 78–92k SEK per month, or the equivalent in EUR for a remote contract.",
+    "de": "Zielkorridor 78–92 Tsd. SEK pro Monat, oder der entsprechende Betrag in Euro bei einem Remote-Vertrag."
+  },
+  "references": [
+    {
+      "name": "Johanna Sperling",
+      "role": {
+        "en": "VP Engineering, Kestrel Freight Systems",
+        "de": "VP Engineering, Kestrel Freight Systems"
+      },
+      "contact": "j.sperling@kestrelfreight.se"
+    },
+    {
+      "name": "Dinesh Raval",
+      "role": {
+        "en": "Principal engineer, Kestrel Freight Systems",
+        "de": "Principal Engineer, Kestrel Freight Systems"
+      },
+      "contact": "dinesh.raval@kestrelfreight.se"
+    }
+  ]
+}
