@@ -49,6 +49,16 @@ const factIcons: Record<FactKey, string> = {
       <a class="switch" href={localeHref(alt.base)} hreflang={alt.htmlLang} lang={alt.htmlLang}>
         {c.switchLabel}
       </a>
+      {/*
+        Both icons ship, and the stylesheet shows whichever belongs to the
+        scheme in force — so the button is already right on a dark machine
+        before any script has run, and stays right when one flips it.
+      */}
+      <button type="button" class="button icon-button" data-theme-toggle title={c.actions.theme}>
+        <Icon name="moon" class="only-light" />
+        <Icon name="sun" class="only-dark" />
+        <span class="visually-hidden">{c.actions.theme}</span>
+      </button>
       <button type="button" class="button icon-button" data-print title={c.actions.print}>
         <Icon name="printer" />
         <span class="visually-hidden">{c.actions.print}</span>
@@ -185,15 +195,52 @@ const factIcons: Record<FactKey, string> = {
 
 <script>
   /**
-   * The print button. There is no separate print route: the print stylesheet
-   * drops the language switch, this button and the session bar, so what the
-   * dialog previews already is the print version.
+   * The two controls in the topline.
    *
-   * Rebinds on `render` because unlocking replaces the whole body.
+   * The print button: there is no separate print route, because the print
+   * stylesheet drops the language switch, both buttons and the session bar, so
+   * what the dialog previews already is the print version.
+   *
+   * The scheme toggle: the stylesheet decides what light and dark look like,
+   * and this only records which one is wanted. On <html>, so the choice
+   * survives the unlocked version replacing the whole body, and in
+   * localStorage, so it survives the visit — the inline script in the head
+   * reads it back before the first paint.
+   *
+   * Both rebind on `render` for that same body replacement.
    */
+  const root = document.documentElement;
+
+  function scheme() {
+    return (
+      root.dataset.theme ?? (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+    );
+  }
+
+  /** Hand the browser's own chrome the colour the page is actually using. */
+  function paint(theme: string) {
+    for (const meta of document.querySelectorAll<HTMLMetaElement>('meta[name="theme-color"]')) {
+      meta.media = meta.dataset.scheme === theme ? 'all' : 'not all';
+    }
+  }
+
+  function flip() {
+    const next = scheme() === 'dark' ? 'light' : 'dark';
+    root.dataset.theme = next;
+    paint(next);
+    try {
+      localStorage.setItem('theme', next);
+    } catch {
+      /* storage can be unavailable; costs the choice at the next visit */
+    }
+  }
+
   function wire() {
     document.querySelector('[data-print]')?.addEventListener('click', () => window.print());
+    document.querySelector('[data-theme-toggle]')?.addEventListener('click', flip);
   }
+
+  if (root.dataset.theme) paint(root.dataset.theme);
 
   addEventListener('render', wire);
   wire();

@@ -43,7 +43,7 @@ export interface Content {
   /** Unit label after a repository's star count. */
   starsLabel: string;
 
-  actions: { print: string };
+  actions: { print: string; theme: string };
 
   workLede: string;
   roles: Record<string, { title: string; body: string }>;

@@ -41,7 +41,7 @@ export const en: Content = {
 
   starsLabel: 'stars',
 
-  actions: { print: 'Print this CV' },
+  actions: { print: 'Print this CV', theme: 'Switch between light and dark' },
 
   workLede:
     'Six years at {employer}. Three titles, one codebase, and a shipment volume that grew about fortyfold while I was there.',

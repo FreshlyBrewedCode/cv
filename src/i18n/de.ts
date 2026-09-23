@@ -41,7 +41,7 @@ export const de: Content = {
 
   starsLabel: 'Sterne',
 
-  actions: { print: 'Lebenslauf drucken' },
+  actions: { print: 'Lebenslauf drucken', theme: 'Zwischen hell und dunkel wechseln' },
 
   workLede:
     'Sechs Jahre bei {employer}. Drei Titel, eine Codebasis und ein Sendungsvolumen, das sich in dieser Zeit etwa vervierzigfacht hat.',

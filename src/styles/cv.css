@@ -41,6 +41,11 @@
      it, never enough to compete with the marigold rules. */
   --tint: #efeeea;
 
+  /* Which of the toggle's two icons is the one on offer. Carried as part of the
+     palette so the scheme is still decided in exactly one place. */
+  --only-light: block;
+  --only-dark: none;
+
   /*
     Where the rail column ends, measured from the left edge of the page. `.wrap`
     is centred and content-box, so its left margin is whatever is left over once
@@ -62,9 +67,17 @@
   Screen only, deliberately. Paper has no colour scheme, and the print styles at
   the end of the file assume a white page — without the `screen` here, printing
   from a machine set to dark would put pale ink on it.
+
+  It is stated twice because the condition has two halves and CSS has no way to
+  write "this media query or that selector" as one rule: the system asking for
+  dark on a page that has not been told otherwise, and the toggle asking for it
+  outright. `[data-theme]` is set on <html>, which is why the toggle survives
+  the unlocked version replacing the whole body.
 */
 @media screen and (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme='light']) {
+    color-scheme: dark;
+
     --paper: #1b1a18;
     --ink: #ece8e1;
     --rule: #3c3934;
@@ -73,6 +86,29 @@
        smudge, so it lifts to the same red held up to the light. */
     --oxblood: #cf6f5f;
     --tint: #232120;
+
+    --only-light: none;
+    --only-dark: block;
+  }
+}
+
+@media screen {
+  :root[data-theme='light'] {
+    color-scheme: light;
+  }
+
+  :root[data-theme='dark'] {
+    color-scheme: dark;
+
+    --paper: #1b1a18;
+    --ink: #ece8e1;
+    --rule: #3c3934;
+    --muted: #a09a90;
+    --oxblood: #cf6f5f;
+    --tint: #232120;
+
+    --only-light: none;
+    --only-dark: block;
   }
 }
 
@@ -158,6 +194,16 @@ a:hover {
   /* Lucide is drawn on a 24px grid at stroke-width 2; scaled down to cap height
      beside a heading, that reads heavier than the type next to it. */
   stroke-width: 1.75;
+}
+
+/* The toggle carries both of its icons and shows the one the palette says is
+   on offer: a moon on a light page, a sun on a dark one. */
+.icon.only-light {
+  display: var(--only-light);
+}
+
+.icon.only-dark {
+  display: var(--only-dark);
 }
 
 .icon-button {

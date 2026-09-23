@@ -27,9 +27,33 @@ const fonts =
     <title>{c.name} — {c.headline}</title>
     <meta name="description" content={c.meta.description} />
     <meta name="robots" content="noarchive, noimageindex, nosnippet" />
-    {/* Both paper colours from cv.css, so the browser's own chrome matches. */}
-    <meta name="theme-color" content="#f7f7f4" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#1b1a18" media="(prefers-color-scheme: dark)" />
+    {/*
+      Both paper colours from cv.css, so the browser's own chrome matches. The
+      media queries hold while the page follows the system; the toggle rewrites
+      them when it stops doing that.
+    */}
+    <meta
+      name="theme-color"
+      content="#f7f7f4"
+      media="(prefers-color-scheme: light)"
+      data-scheme="light"
+    />
+    <meta
+      name="theme-color"
+      content="#1b1a18"
+      media="(prefers-color-scheme: dark)"
+      data-scheme="dark"
+    />
+    <script is:inline>
+      /* Before the first paint, so a stored choice never shows as a flash of
+         the other scheme. Everything else about the toggle is in Cv.astro. */
+      try {
+        const stored = localStorage.getItem('theme');
+        if (stored === 'light' || stored === 'dark') document.documentElement.dataset.theme = stored;
+      } catch {
+        /* storage can be unavailable; the page just follows the system then */
+      }
+    </script>
     <link rel="icon" href="data:," />
     {
       langs.map((l) => (
