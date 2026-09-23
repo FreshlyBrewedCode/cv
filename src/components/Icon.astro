@@ -22,11 +22,16 @@ const { name, class: className } = Astro.props;
 const file = new URL(`../../node_modules/lucide-static/icons/${name}.svg`, import.meta.url);
 if (!fs.existsSync(file)) throw new Error(`Icon "${name}" is not in lucide-static`);
 
+// Only the opening <svg> tag loses its size: shapes inside carry their own
+// width and height (a <rect> without them draws nothing).
 const svg = fs
   .readFileSync(file, 'utf8')
   .replace(/<!--[\s\S]*?-->/g, '')
-  .replace(/\s(width|height|class)="[^"]*"/g, '')
-  .replace('<svg', `<svg class="icon ${className ?? ''}" aria-hidden="true" focusable="false"`)
+  .replace(/<svg\b[^>]*>/, (tag) =>
+    tag
+      .replace(/\s(width|height|class)="[^"]*"/g, '')
+      .replace('<svg', `<svg class="icon ${className ?? ''}" aria-hidden="true" focusable="false"`),
+  )
   .trim();
 ---
 
