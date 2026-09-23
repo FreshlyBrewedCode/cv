@@ -549,7 +549,7 @@ a:hover {
     padding is applied once, not once per page.
   */
   @page {
-    margin: 14mm;
+    /*margin: 14mm;*/
     padding: 14mm 0;
   }
 
@@ -560,7 +560,7 @@ a:hover {
 
   .wrap {
     max-width: none;
-    padding-inline: 12mm;
+    padding-inline: 20mm;
   }
 
   /*
@@ -601,8 +601,8 @@ a:hover {
     background: var(--tint);
     /* Out to three edges of the sheet, with the page's own margins taken back
        as padding so the text inside stays aligned with the sections below. */
-    margin-inline: -12mm;
-    padding: 12mm 12mm 8mm;
+    margin-inline: -20mm;
+    padding: 20mm 20mm 8mm;
     margin-bottom: 9mm;
   }
 
@@ -644,6 +644,10 @@ a:hover {
 
   .item {
     break-inside: avoid;
+  }
+
+  .item p {
+    max-width: 80ch;
   }
 
   .link {
