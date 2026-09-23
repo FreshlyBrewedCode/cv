@@ -152,7 +152,7 @@ h3,
 
 a {
   color: inherit;
-  text-decoration-color: var(--oxblood);
+  text-decoration-color: var(--marigold);
   text-decoration-thickness: 1px;
   text-underline-offset: 0.2em;
 }
@@ -297,6 +297,7 @@ a:hover {
   top: 2rem;
   font-size: 0.9375rem;
   padding-block: 0 2rem;
+  margin-right: 1rem;
 }
 
 .facts {
@@ -382,6 +383,7 @@ a:hover {
      sit close enough to the name without it. */
   .rail-sticky {
     position: static;
+    margin-right: 0rem;
   }
 
   .name {
@@ -547,11 +549,13 @@ a:hover {
     padding is applied once, not once per page.
   */
   @page {
-    margin: 14mm 0;
+    margin: 14mm;
+    padding: 14mm 0;
   }
 
   @page :first {
     margin-top: 0;
+    padding-top: 0;
   }
 
   .wrap {
@@ -605,6 +609,7 @@ a:hover {
   .rail-sticky {
     position: static;
     padding-block: 0;
+    margin-right: 0rem;
   }
 
   .layout {
