@@ -212,11 +212,13 @@ a:hover {
   isolation: isolate;
 }
 
+/* No padding at the head: the name is the rail's first line and has to sit on
+   the same line as the first section heading across the gap. */
 .rail-sticky {
   position: sticky;
   top: 2rem;
   font-size: 0.9375rem;
-  padding-block: 0.5rem 2rem;
+  padding-block: 0 2rem;
 }
 
 .facts {
@@ -273,7 +275,6 @@ a:hover {
 
   .hero {
     background: var(--tint);
-    padding-block: clamp(1.5rem, 4vw, 2.5rem);
   }
 
   .layout {
@@ -297,9 +298,11 @@ a:hover {
     right: calc(-1 * var(--gutter));
   }
 
+  /* Nothing to stick to in one column, and the layout's own padding is the
+     whole distance from the topline above — the switch and the print button
+     sit close enough to the name without it. */
   .rail-sticky {
     position: static;
-    padding-block: 1.5rem 2rem;
   }
 
   .name {
