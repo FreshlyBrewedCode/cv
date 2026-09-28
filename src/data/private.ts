@@ -1,5 +1,4 @@
 import fs from 'node:fs';
-import type { Lang } from '../i18n/types';
 
 /**
  * Private CV data, read from disk at build time with `fs` on purpose.
@@ -9,17 +8,9 @@ import type { Lang } from '../i18n/types';
  * file here keeps it server-only: these values only ever reach a browser inside
  * the encrypted bundle, and only for someone holding a key.
  */
-type Localized = Record<Lang, string>;
-
 export interface PrivateData {
-  legalName: string;
-  email: string;
   phone: string;
-  address: { street: string; postal: string };
-  employer: { name: string; site: string };
-  availability: Localized;
-  compensation: Localized;
-  references: { name: string; role: Localized; contact: string }[];
+  employer: { name: string };
 }
 
 const real = new URL('../../private/private.json', import.meta.url);

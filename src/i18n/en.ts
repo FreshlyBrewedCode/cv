@@ -1,41 +1,39 @@
 import type { Content } from './types';
 
+const YEAR = new Date().getFullYear();
+
 export const en: Content = {
   htmlLang: 'en',
   base: '/',
   switchLabel: 'Deutsch',
 
-  name: 'Ari Lindqvist',
+  name: 'Karl',
   headline: 'Full-stack engineer',
-  city: 'Gothenburg, Sweden',
-  intro:
-    'I build and run the whole path from a browser form to the row it writes. Six years of that at one freight-logistics company, plus a handful of tools I maintain in public because I needed them first.',
+  city: 'Göttingen',
+  intro: [
+    `I have been building and working with software for over ${YEAR - 2014} years, ${YEAR - 2021} of them professionally. I am fascinated by anything technical. What started as the wish to make my own games has led me through many fields over the years: computer graphics, web technologies, design, mobile, XR, AI and more. Today I mostly work with web technologies and a TypeScript stack from end to end.`,
+    `Right now I am trying to understand the shift AI is bringing to how we work as software engineers. I try to stay at the front of it, exploring and adopting new ways of working and new possibilities, while still telling hype apart from actual progress.`,
+    `Away from work I am into cycling, running, photography, cappuccino and baking pizza ("the best in town", according to some friends). If there is any time left after that (or it is winter), I work on my next open-source side project (see below).`,
+  ].join('\n'),
 
-  employerPublic: 'a freight-logistics SaaS company, around 180 people',
-  publicEmail: 'hello@lindqvist.dev',
+  employerPublic: 'a mid-sized company in the biopharmaceutical industry',
+  publicEmail: 'karl@frebreco.de',
 
   meta: {
-    description:
-      'Full-stack engineer in Gothenburg. Go, TypeScript and Postgres, from the browser down to the pager.',
+    description: 'Full-stack engineer in Göttingen. TypeScript all the way.',
   },
 
   sections: {
-    about: 'Where I work in the stack',
-    projects: 'Things I maintain in public',
-    work: 'The day job, which pays for all of it',
-    skills: 'What I build with',
-    writing: 'Written down somewhere',
-    references: 'People who will vouch for it',
-    terms: 'Terms',
+    skills: 'Technologies & skills',
+    about: 'About me',
+    projects: 'Side projects and open source',
+    work: 'Career and education',
   },
 
   rail: {
     based: 'Based in',
     email: 'Email',
     phone: 'Phone',
-    address: 'Address',
-    available: 'Available',
-    rate: 'Rate',
     github: 'GitHub',
     since: 'Working since',
   },
@@ -47,85 +45,47 @@ export const en: Content = {
       services: 'Cloud & services',
       tools: 'Tools',
       ai: 'AI',
-      practice: 'Practice',
     },
-    past: 'used before',
-    terms: {
-      mentoring: 'Mentoring',
-      'design reviews': 'Design reviews',
-      'incident response': 'Incident response',
-      'technical writing': 'Technical writing',
-    },
+    past: 'used before or rarely',
   },
-
-  starsLabel: 'stars',
 
   actions: { print: 'Print this CV', theme: 'Switch between light and dark' },
 
   workLede:
-    'Six years at {employer}. Three titles, one codebase, and a shipment volume that grew about fortyfold while I was there.',
+    'I was lucky enough to start working in the IT department of {employer} while I was still studying. I still work there today, and over that time I have had the chance to work in several roles and on many different projects.',
 
   roles: {
-    staff: {
-      title: 'Staff engineer',
-      body: 'Own the platform the product teams deploy onto. Cut median deploy time from 19 minutes to under 4 by replacing a Jenkins pipeline with a build cache and a small Go deploy agent. Mentor four engineers and run the design review rotation.',
+    fullStack: {
+      title: 'Software engineer, full-stack',
+      body: 'Shortly after ChatGPT was released, a small team formed in my department to build internal, LLM-based web apps. Some time later I joined this "AI Apps" team as a frontend engineer, but soon took on more and more backend and DevOps work as well. Together with the rest of the team of about eight people, we build and run two internal apps with around 5,000 monthly users. I also played a major part in designing and implementing a new architecture for our flagship app. Alongside my regular work as an engineer, I actively champion "agentic engineering" inside the company: I regularly try out new ways of working and share what I learn, for example in internal workshops and initiatives.',
     },
-    senior: {
-      title: 'Senior full-stack engineer',
-      body: 'Rebuilt the shipment tracking UI in Svelte against a new Go API, which took the p95 page load from 3.4s to 780ms. Introduced change-data-capture from Postgres so the analytics team stopped querying the production replica.',
+    '3d': {
+      title: '3D visualization engineer, Mixed Reality',
+      body: 'After graduating I was taken on full-time. At the same time we set up a small internal team focused entirely on mixed reality. As its developer, I was mainly responsible for the technical side of numerous smaller internal projects in augmented reality and 3D visualization. During this time I built and maintained a set of internal packages for the Unity engine that let us start new projects and prototypes quickly and validate ideas. Most recently my focus included AR apps for visualizing new production plants and for training customers.',
     },
-    backend: {
-      title: 'Backend engineer',
-      body: 'Joined as the fifth engineer. Wrote the customs-declaration service that still handles every cross-border shipment, and the retry machinery around a carrier API that went down roughly weekly.',
+    workingStudent: {
+      title: 'Intern & working student, Mixed Reality',
+      body: 'While studying I worked first as an intern and then as a working student, focusing on augmented reality. Driven by an innovation project in the company, I designed and built prototypes and demos with the Unity engine for a range of hardware, including Microsoft HoloLens and HTC Vive, and later Apple Vision Pro.',
     },
     bachelor: {
-      title: 'BSc Computer Science, Chalmers University of Technology',
-      body: 'Thesis on consistency trade-offs in offline-capable mobile apps, supervised in the distributed systems group. Teaching assistant for the second-year databases course for two terms.',
+      title: 'BSc Computer Science & Media Design, Hochschule Hannover',
+      body: 'A combined degree that pairs applied computer science with media design. Besides the general foundations of computer science, it covered usability, web and game design, 3D animation, image editing and computer graphics.',
     },
     school: {
-      title: 'Natural Sciences programme, Hvitfeldtska gymnasiet',
-      body: 'Upper secondary school in Göteborg, with mathematics and physics as the main subjects. Wrote my first web app here: a timetable for the school’s robotics club.',
+      title: 'Abitur, Gymnasium Corvinianum, Northeim',
+      body: 'Main subjects: mathematics, physics, English and computer science.',
     },
   },
 
   repos: {
-    tugboat: {
-      blurb: 'Deploy a container to a single server over SSH, with no control plane.',
+    canvas: {
+      blurb: 'A collaborative canvas for agents and humans.',
       detail:
-        'Written after the third time a client wanted zero-downtime deploys and got handed a Kubernetes cluster. One binary, a systemd unit, and a health check.',
+        'Prototype built over a weekend. My go-to example when someone asks what you can build with AI.',
     },
-    'sqlite-stream': {
-      blurb: 'Change-data-capture from SQLite into Postgres or Kafka.',
-      detail:
-        'Tails the WAL and emits typed change events. Used in production by a few local-first apps that need a server-side copy without writing twice.',
-    },
-    formwork: {
-      blurb: 'Form state for Svelte that keeps its types all the way to the server.',
-      detail:
-        'One schema describes the fields, the validation, and the payload. The generated types are the same ones the endpoint parses, so a renamed field breaks the build instead of production.',
-    },
-    lilnotes: {
-      blurb: 'Local-first markdown notes that sync through a 40-line server.',
-      detail:
-        'A PWA over IndexedDB with last-write-wins sync. Built to test whether local-first is worth the complexity for small documents. It is.',
-    },
-    plzcache: {
-      blurb: 'HTTP caching middleware that actually reads the request headers.',
-      detail:
-        'Implements the parts of RFC 9111 that matter behind an API gateway: revalidation, vary handling, and stale-while-revalidate.',
-    },
-  },
-
-  writing: {
-    retry: {
-      title: 'The retry that made the outage worse',
-      where: 'personal blog',
-      note: 'Why an exponential backoff without jitter turned a 30-second carrier blip into 20 minutes of failed shipments.',
-    },
-    'control-plane': {
-      title: 'Deploying without a control plane',
-      where: 'conference talk, Øredev',
-      note: 'The argument behind tugboat, delivered to a room that mostly disagreed.',
+    factory: {
+      blurb: 'My take on the "software factory".',
+      detail: 'Agent workflows in TypeScript, plus a web UI for monitoring them.',
     },
   },
 

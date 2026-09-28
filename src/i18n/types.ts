@@ -10,12 +10,13 @@ export interface Content {
   name: string;
   headline: string;
   city: string;
+  /** One paragraph per line. */
   intro: string;
 
   /** Stands in for the employer's name on the public page. Not a placeholder:
       it reads as a normal way to describe an employer you have not named. */
   employerPublic: string;
-  /** The address anyone may write to. The personal one is private. */
+  /** The address anyone may write to, in both versions. */
   publicEmail: string;
 
   meta: { description: string };
@@ -25,18 +26,12 @@ export interface Content {
     projects: string;
     work: string;
     skills: string;
-    writing: string;
-    references: string;
-    terms: string;
   };
 
   rail: {
     based: string;
     email: string;
     phone: string;
-    address: string;
-    available: string;
-    rate: string;
     github: string;
     since: string;
   };
@@ -45,20 +40,13 @@ export interface Content {
     groups: Record<string, string>;
     /** Shown beside things worked with before but not any more. */
     past: string;
-    /** Translations for skill names that are ordinary words, keyed by the
-        English name in src/data/shared.ts. */
-    terms: Record<string, string>;
   };
-
-  /** Unit label after a repository's star count. */
-  starsLabel: string;
 
   actions: { print: string; theme: string };
 
   workLede: string;
   roles: Record<string, { title: string; body: string }>;
   repos: Record<string, { blurb: string; detail: string }>;
-  writing: Record<string, { title: string; where: string; note: string }>;
 
   vault: {
     /** Only ever rendered in the unlocked view, so never public. */

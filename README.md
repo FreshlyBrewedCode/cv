@@ -2,8 +2,8 @@
 
 A static Astro site in English and German. The public page is a complete,
 ordinary CV with nothing missing and nothing marked. Anyone arriving with a key
-in their link sees a fuller version — real employer, contact details,
-availability, rate, references — decrypted in their browser.
+in their link sees a fuller version — real employer and phone number —
+decrypted in their browser.
 
 | Route   | Language |
 | ------- | -------- |
@@ -151,7 +151,7 @@ document.body replaced
 Encrypting the whole body rather than marking individual fields is what makes
 the public page honest-looking. Private sections do not exist in it, and
 substituted values read as ordinary prose: the employer is *described* rather
-than named, and the contact address is a real public alias rather than a gap.
+than named, and the email address is the same in both versions.
 
 Key handling, per page:
 
@@ -203,8 +203,6 @@ someone googling your name get the public CV and nothing else.
   never leave the server unauthorised, or do not publish it at all.
 
 Keep genuinely sensitive data out of both versions and send it on request.
-`private/private.example.json` includes a street address to exercise the
-mechanism, not to recommend publishing one.
 
 Passphrases are deliberately unsupported. A 256-bit random key pasted from a link
 is stronger than anything memorable and no harder to use.

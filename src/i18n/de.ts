@@ -1,41 +1,39 @@
 import type { Content } from './types';
 
+const YEAR = new Date().getFullYear();
+
 export const de: Content = {
   htmlLang: 'de',
   base: '/de/',
   switchLabel: 'English',
 
-  name: 'Ari Lindqvist',
+  name: 'Karl',
   headline: 'Full-Stack-Entwickler',
-  city: 'Göteborg, Schweden',
-  intro:
-    'Ich baue und betreibe den gesamten Weg vom Formular im Browser bis zu der Zeile, die dabei in der Datenbank landet. Sechs Jahre davon bei einem einzigen Logistikunternehmen, dazu eine Handvoll Werkzeuge, die ich öffentlich pflege, weil ich sie zuerst selbst gebraucht habe.',
+  city: 'Göttingen',
+  intro: [
+    `Seit über ${YEAR - 2014} Jahren baue ich Software und arbeite mit ihr, ${YEAR - 2021} davon professionell. Ich begeistere mich für alles, was technisch ist. Ursprünglich angetrieben durch den Wunsch, eigene Spiele zu entwickeln, habe ich mich über die Jahre mit vielen verschiedenen Gebieten beschäftigt: Computergrafik, Webtechnologien, Design, Mobile, XR, AI und mehr. Heute arbeite ich hauptsächlich mit Webtechnologien und einem kompletten TypeScript-Full-Stack.`,
+    `Aktuell versuche ich, den Wandel zu verstehen, den wir als Softwareentwickler durch AI erleben. Dabei versuche ich, vorne mit dabei zu sein, neue Arbeitsweisen und Möglichkeiten zu erkunden und zu nutzen und trotzdem Hype von tatsächlichem Fortschritt zu unterscheiden.`,
+    `Abseits der Arbeit begeistere ich mich für Radfahren, Laufen, Fotografie, Cappuccino und Pizzabacken („die beste der Stadt“, laut einigen Freunden). Falls dann noch Zeit bleibt (oder Winter ist), arbeite ich an meinem nächsten Open-Source-Sideproject (siehe unten).`,
+  ].join('\n'),
 
-  employerPublic: 'einem SaaS-Anbieter für Frachtlogistik mit rund 180 Mitarbeitenden',
-  publicEmail: 'hallo@lindqvist.dev',
+  employerPublic: 'einem mittelgroßen Unternehmen der Biopharma-Industrie',
+  publicEmail: 'karl@frebreco.de',
 
   meta: {
-    description:
-      'Full-Stack-Entwickler in Göteborg. Go, TypeScript und Postgres, vom Browser bis zum Bereitschaftshandy.',
+    description: 'Full-Stack-Entwickler in Göttingen. TypeScript all the way.',
   },
 
   sections: {
-    skills: 'Womit ich baue',
-    about: 'Wo ich im Stack arbeite',
-    projects: 'Was ich öffentlich pflege',
-    work: 'Der Job, der das alles bezahlt',
-    writing: 'Irgendwo aufgeschrieben',
-    references: 'Menschen, die dafür geradestehen',
-    terms: 'Konditionen',
+    skills: 'Technologien & Skills',
+    about: 'Über mich',
+    projects: 'Sideprojects und Open Source',
+    work: 'Karriere und Bildung',
   },
 
   rail: {
     based: 'Standort',
     email: 'E-Mail',
     phone: 'Telefon',
-    address: 'Adresse',
-    available: 'Verfügbar',
-    rate: 'Gehaltsvorstellung',
     github: 'GitHub',
     since: 'Berufstätig seit',
   },
@@ -45,87 +43,49 @@ export const de: Content = {
       languages: 'Sprachen',
       frameworks: 'Bibliotheken & Frameworks',
       services: 'Cloud & Dienste',
-      tools: 'Werkzeuge',
-      ai: 'KI',
-      practice: 'Arbeitsweise',
+      tools: 'Tools',
+      ai: 'AI',
     },
-    past: 'früher genutzt',
-    terms: {
-      mentoring: 'Mentoring',
-      'design reviews': 'Design-Reviews',
-      'incident response': 'Incident Response',
-      'technical writing': 'Technisches Schreiben',
-    },
+    past: 'früher/wenig genutzt',
   },
-
-  starsLabel: 'Sterne',
 
   actions: { print: 'Lebenslauf drucken', theme: 'Zwischen hell und dunkel wechseln' },
 
   workLede:
-    'Sechs Jahre bei {employer}. Drei Titel, eine Codebasis und ein Sendungsvolumen, das sich in dieser Zeit etwa vervierzigfacht hat.',
+    'Ich hatte das Privileg, schon während des Studiums in der IT von {employer} zu arbeiten. Dort bin ich bis heute und durfte in dieser Zeit in verschiedenen Rollen und an verschiedenen Projekten arbeiten.',
 
   roles: {
-    staff: {
-      title: 'Staff Engineer',
-      body: 'Verantwortlich für die Plattform, auf die alle Produktteams ausliefern. Die mittlere Deploy-Dauer von 19 Minuten auf unter 4 gesenkt, indem eine Jenkins-Pipeline durch einen Build-Cache und einen kleinen Deploy-Agenten in Go ersetzt wurde. Mentor für vier Kolleginnen und Kollegen, Organisation der Design-Reviews.',
+    fullStack: {
+      title: 'Software Engineer, Full-Stack',
+      body: 'Kurz nach dem Release von ChatGPT gründete sich in meiner Abteilung ein kleines Team, das sich auf die Entwicklung interner, LLM-basierter Web-Apps konzentrierte. Einige Zeit später trat auch ich dem „AI Apps“-Team als Frontend-Entwickler bei. Schon bald übernahm ich allerdings zusätzlich mehr und mehr Aufgaben im Backend- und DevOps-Bereich. Zusammen mit dem Rest des Teams aus etwa acht Leuten entwickeln und betreuen wir zwei interne Apps mit ca. 5.000 monatlichen Nutzern. Außerdem war ich maßgeblich an der Konzeption und Umsetzung einer neuen Architektur für unsere Flaggschiff-App beteiligt. Neben meinen normalen Aufgaben als Entwickler setze ich mich intern aktiv für das Thema „Agentic Engineering“ ein. Dafür erprobe ich regelmäßig neue Arbeitsweisen und teile mein Wissen, z. B. in internen Workshops oder Initiativen.',
     },
-    senior: {
-      title: 'Senior Full-Stack-Entwickler',
-      body: 'Die Oberfläche für die Sendungsverfolgung in Svelte neu gebaut, gegen eine neue Go-API. Der p95-Seitenaufbau ging dabei von 3,4 s auf 780 ms zurück. Change Data Capture aus Postgres eingeführt, damit das Analytics-Team nicht länger das Produktions-Replikat abfragt.',
+    '3d': {
+      title: '3D Visualization Engineer, Mixed Reality',
+      body: 'Nach meinem Studium wurde ich als Vollzeitmitarbeiter übernommen. Zeitgleich gründeten wir intern ein kleines Team, das sich ausschließlich auf den Bereich „Mixed Reality“ konzentrierte. Hier trug ich als Entwickler die Hauptverantwortung für den technischen Teil zahlreicher kleinerer interner Projekte im Bereich Augmented Reality und 3D-Visualisierung. In dieser Zeit entwickelte und betreute ich eine Reihe interner Packages für die Unity Engine, mit denen wir schnell neue Projekte und Prototypen starten und Ideen validieren konnten. Zuletzt lag mein Fokus u. a. auf AR-Apps zur Visualisierung neuer Produktionsanlagen und zur Schulung von Kunden.',
     },
-    backend: {
-      title: 'Backend-Entwickler',
-      body: 'Als fünfter Entwickler eingestiegen. Den Zolldienst geschrieben, der bis heute jede grenzüberschreitende Sendung abwickelt, dazu die Wiederholungslogik um eine Spediteurs-API, die ungefähr wöchentlich ausfiel.',
+    workingStudent: {
+      title: 'Praktikum & Werkstudent, Mixed Reality',
+      body: 'Während meines Studiums arbeitete ich erst als Praktikant und danach als Werkstudent. Mein Fokus lag dabei auf dem Bereich Augmented Reality. Im Rahmen eines Innovationsprojekts im Unternehmen entwickelte und gestaltete ich Prototypen und Demos mit der Unity Engine für verschiedene Hardware, u. a. Microsoft HoloLens und HTC Vive und später auch Apple Vision Pro.',
     },
     bachelor: {
-      title: 'B.Sc. Informatik, Chalmers University of Technology',
-      body: 'Abschlussarbeit über Konsistenz-Kompromisse in offlinefähigen Mobil-Apps, betreut von der Arbeitsgruppe für verteilte Systeme. Zwei Semester Tutor im Datenbankkurs des zweiten Studienjahres.',
+      title: 'B.Sc. Mediendesigninformatik, Hochschule Hannover',
+      body: 'Ein gemischter Studiengang, der angewandte Informatik mit Mediendesign kombiniert. Das Studium umfasste allgemeine Informatik-Grundlagen, aber auch Themengebiete wie Usability, Web- und Gamedesign, 3D-Animation, Bildbearbeitung und Computergrafik.',
     },
     school: {
-      title: 'Naturwissenschaftliches Profil, Hvitfeldtska gymnasiet',
-      body: 'Gymnasium in Göteborg mit Mathematik und Physik als Schwerpunkt. Hier die erste Web-App geschrieben: einen Stundenplan für die Robotik-AG der Schule.',
+      title: 'Abitur, Gymnasium Corvinianum, Northeim',
+      body: 'Schwerpunkte: Mathematik, Physik, Englisch und Informatik.',
     },
   },
 
   repos: {
-    tugboat: {
-      blurb: 'Einen Container per SSH auf einen einzelnen Server ausliefern, ganz ohne Control Plane.',
+    canvas: {
+      blurb: 'Ein kollaborativer Canvas für Agents und Menschen.',
       detail:
-        'Entstanden, nachdem zum dritten Mal jemand Deployments ohne Ausfallzeit wollte und dafür ein Kubernetes-Cluster bekam. Eine Binary, eine systemd-Unit, ein Health-Check.',
+        'Als Prototyp an einem Wochenende gebaut. Mein Vorzeigeprojekt, wenn jemand fragt, was man mit AI bauen kann.',
     },
-    'sqlite-stream': {
-      blurb: 'Change Data Capture von SQLite nach Postgres oder Kafka.',
-      detail:
-        'Liest das WAL mit und gibt typisierte Änderungsereignisse aus. Im Einsatz bei einigen Local-First-Anwendungen, die eine serverseitige Kopie brauchen, ohne doppelt zu schreiben.',
-    },
-    formwork: {
-      blurb: 'Formularzustand für Svelte, der seine Typen bis zum Server behält.',
-      detail:
-        'Ein Schema beschreibt die Felder, die Validierung und die Nutzdaten. Die erzeugten Typen sind dieselben, die der Endpunkt parst. Ein umbenanntes Feld bricht damit den Build statt der Produktion.',
-    },
-    lilnotes: {
-      blurb: 'Local-First-Notizen in Markdown, die über 40 Zeilen Server synchronisieren.',
-      detail:
-        'Eine PWA auf IndexedDB mit Last-Write-Wins-Abgleich. Gebaut, um zu prüfen, ob Local First den Aufwand für kleine Dokumente wert ist. Ist es.',
-    },
-    plzcache: {
-      blurb: 'HTTP-Caching-Middleware, die die Request-Header tatsächlich liest.',
-      detail:
-        'Setzt die Teile von RFC 9111 um, auf die es hinter einem API-Gateway ankommt: Revalidierung, Vary-Handling und Stale-While-Revalidate.',
-    },
-  },
-
-  writing: {
-    retry: {
-      title: 'Der Retry, der den Ausfall schlimmer machte',
-      where: 'eigener Blog',
-      note: 'Warum ein exponentielles Backoff ohne Jitter aus einer 30-Sekunden-Störung beim Spediteur 20 Minuten fehlgeschlagener Sendungen machte.',
-    },
-    'control-plane': {
-      title: 'Ausliefern ohne Control Plane',
-      where: 'Konferenzvortrag, Øredev',
-      note: 'Die Begründung hinter tugboat, vorgetragen vor einem Saal, der überwiegend anderer Meinung war.',
+    factory: {
+      blurb: 'Meine Version der „Software Factory“.',
+      detail: 'Agent-Workflows in TypeScript plus eine Web-UI für das Monitoring.',
     },
   },
 

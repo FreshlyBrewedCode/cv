@@ -5,8 +5,9 @@ on:
     branches: [main]
   workflow_dispatch:
 
-# The repo is private; Pages is public. That is the intended shape — the public
-# CV is meant to be read, and the private version only ships as ciphertext.
+# The repo and Pages are both public. That is the intended shape — the public
+# CV is meant to be read, and the private data only ever lives in secrets and
+# ships as ciphertext.
 permissions:
   contents: read
   pages: write

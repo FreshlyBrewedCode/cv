@@ -28,8 +28,6 @@ const icons = {
   projects: 'waypoints',
   work: 'briefcase',
   skills: 'shapes',
-  writing: 'pen-line',
-  references: 'user-check',
 };
 
 /** One icon per rail fact, named for what the fact actually holds. */
@@ -37,11 +35,8 @@ const factIcons: Record<FactKey, string> = {
   based: 'map-pin',
   email: 'at-sign',
   phone: 'phone',
-  address: 'home',
   github: 'git-branch',
   since: 'calendar-days',
-  available: 'calendar-check',
-  rate: 'wallet',
 };
 ---
 
@@ -105,7 +100,11 @@ const factIcons: Record<FactKey, string> = {
   <main class="main">
     <section aria-labelledby="about">
       <h2 class="h2" id="about"><Icon name={icons.about} />{c.sections.about}</h2>
-      <p class="prose">{c.intro}</p>
+      <div class="prose">
+        {c.intro.split('\n').map((p) => (
+          <p>{p}</p>
+        ))}
+      </div>
     </section>
 
     <section aria-labelledby="work">
@@ -153,45 +152,6 @@ const factIcons: Record<FactKey, string> = {
         }
       </ul>
     </section>
-
-    <section aria-labelledby="writing">
-      <h2 class="h2" id="writing"><Icon name={icons.writing} />{c.sections.writing}</h2>
-      <ul class="list">
-        {
-          v.writing.map((w) => (
-            <li class="item">
-              <p class="when">
-                {w.where}, {w.year}
-              </p>
-              <h3>{w.title}</h3>
-              <p class="quiet">{w.note}</p>
-            </li>
-          ))
-        }
-      </ul>
-    </section>
-
-    {
-      v.references.length > 0 && (
-        <section aria-labelledby="refs">
-          <h2 class="h2" id="refs">
-            <Icon name={icons.references} />
-            {c.sections.references}
-          </h2>
-          <ul class="refs">
-            {v.references.map((r) => (
-              <li>
-                <h3>{r.name}</h3>
-                <p class="quiet">{r.role}</p>
-                <p class="quiet">
-                  <a href={`mailto:${r.contact}`}>{r.contact}</a>
-                </p>
-              </li>
-            ))}
-          </ul>
-        </section>
-      )
-    }
   </main>
 </div>
 

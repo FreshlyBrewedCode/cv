@@ -70,19 +70,11 @@ const privSource = fs.existsSync('private/private.json')
   : 'private/private.example.json';
 const priv = JSON.parse(fs.readFileSync(privSource, 'utf8'));
 
-for (const { lang, url, dist } of pages) {
+for (const { url, dist } of pages) {
   const html = await open(material, url);
   if (!html) fail(`no bundle for ${url} — did the build run, with the same CV_BASE?`);
 
-  const expect = [
-    priv.email,
-    priv.phone,
-    priv.employer.name,
-    priv.address.street,
-    priv.availability[lang],
-    priv.compensation[lang],
-    priv.references[0].name,
-  ];
+  const expect = [priv.phone, priv.employer.name];
   const missing = expect.filter((value) => !html.includes(value));
   if (missing.length) fail(`${url} decrypted but is missing: ${missing.join(' | ')}`);
 

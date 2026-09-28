@@ -448,6 +448,10 @@ a:hover {
   max-width: 62ch;
 }
 
+.prose p + p {
+  margin-top: 0.75em;
+}
+
 .list {
   list-style: none;
   margin: 0;
@@ -546,20 +550,6 @@ a:hover {
   padding: 0;
   font-size: 0.8125rem;
   color: var(--muted);
-}
-
-.refs {
-  display: grid;
-  gap: 1.25rem;
-  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.refs h3 {
-  font-size: 1.0625rem;
-  margin-bottom: 0.2rem;
 }
 
 /* ---------- skills ---------- */
