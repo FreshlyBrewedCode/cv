@@ -18,6 +18,8 @@ export interface View {
   c: Content;
   lang: Lang;
   unlocked: boolean;
+  /** Full name once unlocked, the first name before that. */
+  name: string;
   facts: Fact[];
   /** Real name once unlocked, a description of the company before that. */
   employer: string;
@@ -56,6 +58,7 @@ export function buildView(lang: Lang, mode: Mode): View {
     c,
     lang,
     unlocked,
+    name: unlocked ? priv.name : c.name,
     facts,
     employer,
     workLede: c.workLede.replace('{employer}', employer),

@@ -2,8 +2,8 @@
 
 A static Astro site in English and German. The public page is a complete,
 ordinary CV with nothing missing and nothing marked. Anyone arriving with a key
-in their link sees a fuller version — real employer and phone number —
-decrypted in their browser.
+in their link sees a fuller version — full name, real employer and phone
+number — decrypted in their browser.
 
 | Route   | Language |
 | ------- | -------- |

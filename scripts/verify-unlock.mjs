@@ -74,7 +74,7 @@ for (const { url, dist } of pages) {
   const html = await open(material, url);
   if (!html) fail(`no bundle for ${url} — did the build run, with the same CV_BASE?`);
 
-  const expect = [priv.phone, priv.employer.name];
+  const expect = [priv.name, priv.phone, priv.employer.name];
   const missing = expect.filter((value) => !html.includes(value));
   if (missing.length) fail(`${url} decrypted but is missing: ${missing.join(' | ')}`);
 

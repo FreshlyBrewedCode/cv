@@ -9,6 +9,8 @@ import fs from 'node:fs';
  * the encrypted bundle, and only for someone holding a key.
  */
 export interface PrivateData {
+  /** Full name, in place of the first name the public page goes by. */
+  name: string;
   phone: string;
   employer: { name: string };
 }
